@@ -1,0 +1,7 @@
+C:\Users\alexi\Desktop\C# Avancé\DM_JDR\DM_JDR\DM_JDR_Console\DM_JDR_Console\bin\Debug\DM_JDR_Console.exe.config
+C:\Users\alexi\Desktop\C# Avancé\DM_JDR\DM_JDR\DM_JDR_Console\DM_JDR_Console\bin\Debug\DM_JDR_Console.exe
+C:\Users\alexi\Desktop\C# Avancé\DM_JDR\DM_JDR\DM_JDR_Console\DM_JDR_Console\bin\Debug\DM_JDR_Console.pdb
+C:\Users\alexi\Desktop\C# Avancé\DM_JDR\DM_JDR\DM_JDR_Console\DM_JDR_Console\obj\Debug\DM_JDR_Console.csprojAssemblyReference.cache
+C:\Users\alexi\Desktop\C# Avancé\DM_JDR\DM_JDR\DM_JDR_Console\DM_JDR_Console\obj\Debug\DM_JDR_Console.csproj.CoreCompileInputs.cache
+C:\Users\alexi\Desktop\C# Avancé\DM_JDR\DM_JDR\DM_JDR_Console\DM_JDR_Console\obj\Debug\DM_JDR_Console.exe
+C:\Users\alexi\Desktop\C# Avancé\DM_JDR\DM_JDR\DM_JDR_Console\DM_JDR_Console\obj\Debug\DM_JDR_Console.pdb
