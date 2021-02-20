@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Characters\Berserker.cs" />
     <Compile Include="Characters\Character.cs" />
+    <Compile Include="Characters\Zombie.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
