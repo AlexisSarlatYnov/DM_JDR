@@ -11,7 +11,7 @@ namespace DM_JDR_Console
     {
         static void Main(string[] args)
         {
-            TestBerserker();
+            //TestBerserker();
             TestZombie();
             
         }
