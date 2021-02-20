@@ -11,7 +11,8 @@ namespace DM_JDR_Console.Characters
 
         public int lostLifeInAHit = 0;
         public int lostLifeTotal = 0;
-        public float initialAttackSpeed = 1f;
+        public float initialAttackSpeed = 1.1f;
+
         public Berserker()
         {
             this.attack = 50;
@@ -21,6 +22,7 @@ namespace DM_JDR_Console.Characters
             this.maximumLife = 400;
             this.currentLife = 400;
             this.powerSpeed = 1f;
+            this.affectedByAttackDelay = false;
             this.lostLifeInAHit = 0;
             this.lostLifeTotal = 0;
         }
@@ -48,13 +50,33 @@ namespace DM_JDR_Console.Characters
         public void BerserkerPower()
         {
             this.SetAttack(this.GetAttack() + (int)Math.Round(this.GetLostLifeInAHit() / 2f));
-            this.SetDefense(this.GetDefense() + (int)Math.Round(this.GetLostLifeInAHit() / 2f));
+            this.SetDamages(this.GetDamages() + (int)Math.Round(this.GetLostLifeInAHit() / 2f));
             int dixPourcentMaxLife = (int)(this.GetMaximumLife() * 0.1f);
-            
+            Console.WriteLine(dixPourcentMaxLife.ToString());
+            int bonusAttackSpeed = this.GetCurrentLife() / dixPourcentMaxLife;
+            int reste = this.GetCurrentLife() % dixPourcentMaxLife;
+            Console.WriteLine(bonusAttackSpeed.ToString());
+            this.SetAttackSpeed(initialAttackSpeed);
+            for (int i = 10; i > 0; i--)
+            {
+                if (bonusAttackSpeed < i)
+                {
+                    this.SetAttackSpeed(this.GetAttackSpeed() + 0.3f);
+                }
+            }
+            if(reste != 0)
+            {
+                this.SetAttackSpeed(this.GetAttackSpeed() - 0.3f);
+            }
         }
 
-
-
-        //TO DO Passif
+        public void BerserkerPassive()
+        {
+            this.SetAffectedByAttackDelay(false);
+            if(this.GetLostLifeInAHit() > (int)Math.Round(this.GetCurrentLife() / 2f))
+            {
+                this.SetAffectedByAttackDelay(true);
+            }
+        }
     }
 }

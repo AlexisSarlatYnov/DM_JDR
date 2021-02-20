@@ -18,6 +18,8 @@ namespace DM_JDR_Console.Characters
         public bool isUndead;
         public bool hitRadiantDamages;
         public bool isHidden;
+        public bool isEaten;
+        public bool affectedByAttackDelay;
         
         public Character()
         {
@@ -31,6 +33,8 @@ namespace DM_JDR_Console.Characters
             this.isUndead = false;
             this.hitRadiantDamages = false;
             this.isHidden = false;
+            this.isEaten = false;
+            this.affectedByAttackDelay = true;
         }
 
         public Character(int pattack, int pdefense, float pattackSpeed, int pdamages, int pmaximumLife, int pcurrentLife, float ppowerSpeed)
@@ -45,9 +49,11 @@ namespace DM_JDR_Console.Characters
             this.isUndead = false;
             this.hitRadiantDamages = false;
             this.isHidden = false;
+            this.isEaten = false;
+            this.affectedByAttackDelay = true;
         }
 
-        public Character(int pattack, int pdefense, float pattackSpeed, int pdamages, int pmaximumLife, int pcurrentLife, float ppowerSpeed, bool pisUndead, bool phitRadiantDamages, bool pisHidden)
+        public Character(int pattack, int pdefense, float pattackSpeed, int pdamages, int pmaximumLife, int pcurrentLife, float ppowerSpeed, bool pisUndead, bool phitRadiantDamages, bool pisHidden, bool pisEaten, bool pAffectedByAttackDelay)
         {
             this.attack = pattack;
             this.defense = pdefense;
@@ -59,6 +65,8 @@ namespace DM_JDR_Console.Characters
             this.isUndead = pisUndead;
             this.hitRadiantDamages = phitRadiantDamages;
             this.isHidden = pisHidden;
+            this.isEaten = pisEaten;
+            this.affectedByAttackDelay = pAffectedByAttackDelay;
         }
 
         public int GetAttack()
@@ -159,6 +167,26 @@ namespace DM_JDR_Console.Characters
         public void SetIsHidden(bool pIsHidden)
         {
             this.isHidden = pIsHidden;
+        }
+
+        public bool GetIsEaten()
+        {
+            return this.isEaten;
+        }
+
+        public void SetIsEaten(bool pIsEaten)
+        {
+            this.isEaten = pIsEaten;
+        }
+
+        public bool GetAffectedByAttackDelay()
+        {
+            return this.affectedByAttackDelay;
+        }
+
+        public void SetAffectedByAttackDelay(bool pAffectedByAttackDelay)
+        {
+            this.affectedByAttackDelay = pAffectedByAttackDelay;
         }
     }
 }
