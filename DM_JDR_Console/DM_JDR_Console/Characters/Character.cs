@@ -20,6 +20,8 @@ namespace DM_JDR_Console.Characters
         public bool isHidden;
         public bool isEaten;
         public bool affectedByAttackDelay;
+        public bool isHited;
+        public int delay;
         
         public Character()
         {
@@ -35,6 +37,8 @@ namespace DM_JDR_Console.Characters
             this.isHidden = false;
             this.isEaten = false;
             this.affectedByAttackDelay = true;
+            this.isHited = false;
+            this.delay = 0;
         }
 
         public Character(int pattack, int pdefense, float pattackSpeed, int pdamages, int pmaximumLife, int pcurrentLife, float ppowerSpeed)
@@ -51,9 +55,11 @@ namespace DM_JDR_Console.Characters
             this.isHidden = false;
             this.isEaten = false;
             this.affectedByAttackDelay = true;
+            this.isHited = false;
+            this.delay = 0;
         }
 
-        public Character(int pattack, int pdefense, float pattackSpeed, int pdamages, int pmaximumLife, int pcurrentLife, float ppowerSpeed, bool pisUndead, bool phitRadiantDamages, bool pisHidden, bool pisEaten, bool pAffectedByAttackDelay)
+        public Character(int pattack, int pdefense, float pattackSpeed, int pdamages, int pmaximumLife, int pcurrentLife, float ppowerSpeed, bool pisUndead, bool phitRadiantDamages, bool pisHidden, bool pisEaten, bool pAffectedByAttackDelay, bool pIsHited, int pdelay)
         {
             this.attack = pattack;
             this.defense = pdefense;
@@ -67,6 +73,8 @@ namespace DM_JDR_Console.Characters
             this.isHidden = pisHidden;
             this.isEaten = pisEaten;
             this.affectedByAttackDelay = pAffectedByAttackDelay;
+            this.isHited = pIsHited;
+            this.delay = pdelay;
         }
 
         public int GetAttack()
@@ -187,6 +195,93 @@ namespace DM_JDR_Console.Characters
         public void SetAffectedByAttackDelay(bool pAffectedByAttackDelay)
         {
             this.affectedByAttackDelay = pAffectedByAttackDelay;
+        }
+
+        public bool GetIsHited()
+        {
+            return this.isHited;
+        }
+
+        public void SetIsHited(bool pIsHited)
+        {
+            this.isHited = pIsHited;
+        }
+
+        public int GetDelay()
+        {
+            return this.delay;
+        }
+
+        public void SetDelay(int pDelay)
+        {
+            this.delay = pDelay;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        //TO DO ATTACK()
+        public virtual void Attack(Character persoAAttaquer)
+        {
+            persoAAttaquer.SetIsHited(false);
+            persoAAttaquer.SetDelay(0);
+            Random rand = new Random();
+            int jetAttaque = this.GetAttack() + rand.Next(1,100);
+            Console.WriteLine("Jet d'attaque : " + jetAttaque.ToString());
+            int jetDefense = persoAAttaquer.GetDefense() + rand.Next(1, 100);
+            Console.WriteLine("Jet de défense : " + jetDefense.ToString());
+            if (jetAttaque - jetDefense > 0)
+            {
+                //touché
+                persoAAttaquer.SetIsHited(true);
+                int damagesSubis = (jetAttaque - jetDefense) * this.GetDamages() / 100;
+                persoAAttaquer.SetCurrentLife(persoAAttaquer.GetCurrentLife() - damagesSubis);
+                if (persoAAttaquer.GetAffectedByAttackDelay() == true)
+                {
+                    if(persoAAttaquer.GetCurrentLife() > 0)
+                    {
+                        persoAAttaquer.SetDelay(damagesSubis);
+                    }
+                }
+            }
+            else
+            {
+                //pas touché
+
+            }
+        }
+
+        public virtual void AttackTest(Character persoAAttaquer, int jetAttaque, int jetDefense)
+        {
+            persoAAttaquer.SetIsHited(false);
+            persoAAttaquer.SetDelay(0);
+            if (jetAttaque - jetDefense > 0)
+            {
+                //touché
+                persoAAttaquer.SetIsHited(true);
+                int damagesSubis = (jetAttaque - jetDefense) * this.GetDamages() / 100;
+                persoAAttaquer.SetCurrentLife(persoAAttaquer.GetCurrentLife() - damagesSubis);
+                if (persoAAttaquer.GetAffectedByAttackDelay() == true)
+                {
+                    if (persoAAttaquer.GetCurrentLife() > 0)
+                    {
+                        persoAAttaquer.SetDelay(damagesSubis);
+                    }
+                }
+            }
+            else
+            {
+                //pas touché
+
+            }
         }
     }
 }

@@ -17,7 +17,8 @@ namespace DM_JDR_Console
             //TestBerserker();
             //TestZombie();
             //TestEvent();
-            TestGuerrier();
+            //TestGuerrier();
+            TestPaladin();
         }
 
         public static void TestBerserker()
@@ -101,27 +102,7 @@ namespace DM_JDR_Console
             Console.WriteLine("Défense de Zombie1 : " + zombie1.GetDefense());
             Console.ReadLine();
         }
-
-        public static void TestEvent()
-        {
-            Counter c = new Counter(new Random().Next(10));
-            c.ThresholdReached += c_ThresholdReached;
-
-            Console.WriteLine("press 'a' key to increase total");
-            while (Console.ReadKey(true).KeyChar == 'a')
-            {
-                Console.WriteLine("adding one");
-                c.Add(1);
-            }
-        }
-
-        static void c_ThresholdReached(object sender, EventArgs e)
-        {
-            Console.WriteLine("The threshold was reached.");
-            Console.ReadLine();
-            Environment.Exit(0);
-        }
-
+                
         public static void TestGuerrier()
         {
             Guerrier guerrier1 = new Guerrier();
@@ -167,6 +148,94 @@ namespace DM_JDR_Console
         public static void EndBonus(Guerrier guerrier, float bonus)
         {
             guerrier.SetAttackSpeed(guerrier.GetAttackSpeed() - bonus);
+        }
+
+
+        public static void TestPaladin()
+        {
+            Paladin paladin1 = new Paladin();
+            Paladin paladin2 = new Paladin();
+            Zombie zombie = new Zombie();
+            Console.WriteLine("Paladin 1 est touché ? " + paladin1.GetIsHited().ToString());
+            Console.WriteLine("Paladin 2 est touché ? " + paladin2.GetIsHited().ToString());
+            Console.WriteLine("Paladin 1 est affecté par un délai ? " + paladin1.GetAffectedByAttackDelay().ToString());
+            Console.WriteLine("Paladin 2 est affecté par un délai ? " + paladin2.GetAffectedByAttackDelay().ToString());
+            Console.WriteLine("Paladin 1 a un délai ? " + paladin1.GetDelay().ToString());
+            Console.WriteLine("Paladin 2 a un délai ? " + paladin2.GetDelay().ToString());
+            Console.WriteLine("Vie du paladin 1 : " + paladin1.GetCurrentLife().ToString());
+            Console.WriteLine("Vie du paladin 2 : " + paladin2.GetCurrentLife().ToString());
+            Console.WriteLine("L'attaque va réussir !");
+            paladin1.AttackTest(paladin2, 100, 10);
+            paladin2.PaladinPower();
+            Console.WriteLine("Paladin 1 est touché ? " + paladin1.GetIsHited().ToString());
+            Console.WriteLine("Paladin 2 est touché ? " + paladin2.GetIsHited().ToString());
+            Console.WriteLine("Paladin 1 est affecté par un délai ? " + paladin1.GetAffectedByAttackDelay().ToString());
+            Console.WriteLine("Paladin 2 est affecté par un délai ? " + paladin2.GetAffectedByAttackDelay().ToString());
+            Console.WriteLine("Paladin 1 a un délai ? " + paladin1.GetDelay().ToString());
+            Console.WriteLine("Paladin 2 a un délai ? " + paladin2.GetDelay().ToString());
+            Console.WriteLine("Vie du paladin 1 : " + paladin1.GetCurrentLife().ToString());
+            Console.WriteLine("Vie du paladin 2 : " + paladin2.GetCurrentLife().ToString());
+            Console.WriteLine("L'attaque va réussir !");
+            paladin1.AttackTest(paladin2, 100, 10);
+            Console.WriteLine("Paladin 1 est touché ? " + paladin1.GetIsHited().ToString());
+            Console.WriteLine("Paladin 2 est touché ? " + paladin2.GetIsHited().ToString());
+            Console.WriteLine("Paladin 1 est affecté par un délai ? " + paladin1.GetAffectedByAttackDelay().ToString());
+            Console.WriteLine("Paladin 2 est affecté par un délai ? " + paladin2.GetAffectedByAttackDelay().ToString());
+            Console.WriteLine("Paladin 1 a un délai ? " + paladin1.GetDelay().ToString());
+            Console.WriteLine("Paladin 2 a un délai ? " + paladin2.GetDelay().ToString());
+            Console.WriteLine("Vie du paladin 1 : " + paladin1.GetCurrentLife().ToString());
+            Console.WriteLine("Vie du paladin 2 : " + paladin2.GetCurrentLife().ToString());
+            Console.WriteLine("L'attaque va échouer !");
+            paladin1.AttackTest(paladin2, 10, 100);
+            paladin2.PaladinPower();
+            Console.WriteLine("Paladin 1 est touché ? " + paladin1.GetIsHited().ToString());
+            Console.WriteLine("Paladin 2 est touché ? " + paladin2.GetIsHited().ToString());
+            Console.WriteLine("Paladin 1 est affecté par un délai ? " + paladin1.GetAffectedByAttackDelay().ToString());
+            Console.WriteLine("Paladin 2 est affecté par un délai ? " + paladin2.GetAffectedByAttackDelay().ToString());
+            Console.WriteLine("Paladin 1 a un délai ? " + paladin1.GetDelay().ToString());
+            Console.WriteLine("Paladin 2 a un délai ? " + paladin2.GetDelay().ToString());
+            Console.WriteLine("Vie du paladin 1 : " + paladin1.GetCurrentLife().ToString());
+            Console.WriteLine("Vie du paladin 2 : " + paladin2.GetCurrentLife().ToString());
+            Console.WriteLine("L'attaque sur le zombie va réussir !");
+            paladin1.AttackTest(zombie, 100, 10);
+            Console.WriteLine("Vie du paladin 1 : " + paladin1.GetCurrentLife().ToString());
+            Console.WriteLine("Vie du zombie : " + zombie.GetCurrentLife().ToString());
+            Console.ReadLine();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public static void TestEvent()
+        {
+            Counter c = new Counter(new Random().Next(10));
+            c.ThresholdReached += c_ThresholdReached;
+
+            Console.WriteLine("press 'a' key to increase total");
+            while (Console.ReadKey(true).KeyChar == 'a')
+            {
+                Console.WriteLine("adding one");
+                c.Add(1);
+            }
+        }
+
+        static void c_ThresholdReached(object sender, EventArgs e)
+        {
+            Console.WriteLine("The threshold was reached.");
+            Console.ReadLine();
+            Environment.Exit(0);
         }
     }
 }
