@@ -1,9 +1,12 @@
 ﻿using DM_JDR_Console.Characters;
+using DM_JDR_Console.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using static DM_JDR_Console.Characters.Guerrier;
 
 namespace DM_JDR_Console
 {
@@ -12,8 +15,9 @@ namespace DM_JDR_Console
         static void Main(string[] args)
         {
             //TestBerserker();
-            TestZombie();
-            
+            //TestZombie();
+            //TestEvent();
+            TestGuerrier();
         }
 
         public static void TestBerserker()
@@ -96,6 +100,73 @@ namespace DM_JDR_Console
             zombie1.ZombiePassive();
             Console.WriteLine("Défense de Zombie1 : " + zombie1.GetDefense());
             Console.ReadLine();
+        }
+
+        public static void TestEvent()
+        {
+            Counter c = new Counter(new Random().Next(10));
+            c.ThresholdReached += c_ThresholdReached;
+
+            Console.WriteLine("press 'a' key to increase total");
+            while (Console.ReadKey(true).KeyChar == 'a')
+            {
+                Console.WriteLine("adding one");
+                c.Add(1);
+            }
+        }
+
+        static void c_ThresholdReached(object sender, EventArgs e)
+        {
+            Console.WriteLine("The threshold was reached.");
+            Console.ReadLine();
+            Environment.Exit(0);
+        }
+
+        public static void TestGuerrier()
+        {
+            Guerrier guerrier1 = new Guerrier();
+            Guerrier guerrier2 = new Guerrier();
+            guerrier1.appelPower += g_appelPower;
+            guerrier2.appelPower += g_appelPower;
+            Console.WriteLine("AttackSpeed de guerrier1 : " + guerrier1.GetAttackSpeed().ToString());
+            Console.WriteLine("AttackSpeed de guerrier2 : " + guerrier2.GetAttackSpeed().ToString());
+            guerrier1.GuerrierPower();
+            Console.WriteLine("AttackSpeed de guerrier1 : " + guerrier1.GetAttackSpeed().ToString());
+            Console.WriteLine("AttackSpeed de guerrier2 : " + guerrier2.GetAttackSpeed().ToString());
+            Thread.Sleep(1000);
+            guerrier1.GuerrierPower();
+            Console.WriteLine("AttackSpeed de guerrier1 : " + guerrier1.GetAttackSpeed().ToString());
+            Console.WriteLine("AttackSpeed de guerrier2 : " + guerrier2.GetAttackSpeed().ToString());
+            Thread.Sleep(1000);
+            guerrier1.GuerrierPower();
+            Console.WriteLine("AttackSpeed de guerrier1 : " + guerrier1.GetAttackSpeed().ToString());
+            Console.WriteLine("AttackSpeed de guerrier2 : " + guerrier2.GetAttackSpeed().ToString());
+            Thread.Sleep(1000);
+            guerrier1.GuerrierPower();
+            Console.WriteLine("AttackSpeed de guerrier1 : " + guerrier1.GetAttackSpeed().ToString());
+            Console.WriteLine("AttackSpeed de guerrier2 : " + guerrier2.GetAttackSpeed().ToString());
+            Thread.Sleep(4000);
+            Console.WriteLine("AttackSpeed de guerrier1 : " + guerrier1.GetAttackSpeed().ToString());
+            Console.WriteLine("AttackSpeed de guerrier2 : " + guerrier2.GetAttackSpeed().ToString());
+            Console.ReadLine();
+        }
+
+        static async void g_appelPower(object sender, AppelPowerEventArgs e)
+        {
+            Console.WriteLine(e.bonusAttackSpeed);
+            Console.WriteLine(e.guerrier);
+            Task debBonus = Task.Run(() => DebBonus(e.guerrier, e.bonusAttackSpeed));
+            await Task.Delay(3000);
+            Task endBonus = Task.Run(() => EndBonus(e.guerrier, e.bonusAttackSpeed));
+        }
+
+        public static void DebBonus(Guerrier guerrier, float bonus)
+        {
+            guerrier.SetAttackSpeed(guerrier.GetAttackSpeed() + bonus);
+        }
+        public static void EndBonus(Guerrier guerrier, float bonus)
+        {
+            guerrier.SetAttackSpeed(guerrier.GetAttackSpeed() - bonus);
         }
     }
 }
