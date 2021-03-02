@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DM_JDR_Console.Characters
 {
-    class Paladin : Character
+    class Paladin : Character, ICharacter
     {
         public Paladin()
         {
@@ -20,7 +20,7 @@ namespace DM_JDR_Console.Characters
             this.hitRadiantDamages = true;
         }
 
-        public void PaladinPower()
+        /*public void PaladinPower()
         {
             this.SetAffectedByAttackDelay(true);
             if (this.GetIsHited() == true)
@@ -28,7 +28,7 @@ namespace DM_JDR_Console.Characters
                 this.SetAffectedByAttackDelay(false);
                 this.SetDelay(0);
             }
-        }
+        }*/
 
         public override void Attack(Character persoAAttaquer)
         {
@@ -93,6 +93,21 @@ namespace DM_JDR_Console.Characters
                 //pas touché
 
             }
+        }
+
+        public override void Power(List<Character> characters)
+        {
+            this.SetAffectedByAttackDelay(true);
+            if (this.GetIsHited() == true)
+            {
+                this.SetAffectedByAttackDelay(false);
+                this.SetDelay(0);
+            }
+        }
+
+        public override void Passive()
+        {
+            base.Passive();
         }
     }
 }

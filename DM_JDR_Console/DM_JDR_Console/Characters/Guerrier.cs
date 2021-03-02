@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DM_JDR_Console.Characters
 {
-    class Guerrier : Character
+    class Guerrier : Character, ICharacter
     {
         public event EventHandler<AppelPowerEventArgs> appelPower;
         public Guerrier()
@@ -20,13 +20,13 @@ namespace DM_JDR_Console.Characters
             this.powerSpeed = 0.2f;
         }
 
-        public void GuerrierPower()
+        /*public void GuerrierPower()
         {
             AppelPowerEventArgs args = new AppelPowerEventArgs();
             args.bonusAttackSpeed = 0.5f;
             args.guerrier = this;
             OnAppelPower(args);
-        }
+        }*/
 
         protected virtual void OnAppelPower(AppelPowerEventArgs e)
         {
@@ -35,6 +35,19 @@ namespace DM_JDR_Console.Characters
             {
                 handler(this, e);
             }
+        }
+
+        public override void Power(List<Character> characters)
+        {
+            AppelPowerEventArgs args = new AppelPowerEventArgs();
+            args.bonusAttackSpeed = 0.5f;
+            args.guerrier = this;
+            OnAppelPower(args);
+        }
+
+        public override void Passive()
+        {
+            base.Passive();
         }
 
         public class AppelPowerEventArgs : EventArgs

@@ -219,7 +219,15 @@ namespace DM_JDR_Console.Characters
 
 
 
+        public virtual void Power(List<Character> characters)
+        {
 
+        }
+
+        public virtual void Passive()
+        {
+
+        }
 
 
 
