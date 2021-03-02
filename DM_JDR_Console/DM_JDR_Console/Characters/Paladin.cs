@@ -35,10 +35,9 @@ namespace DM_JDR_Console.Characters
             persoAAttaquer.SetAffectedByAttackDelay(true);
             persoAAttaquer.SetIsHited(false);
             persoAAttaquer.SetDelay(0);
-            Random rand = new Random();
-            int jetAttaque = this.GetAttack() + rand.Next(1, 100);
+            int jetAttaque = this.GetAttack() + RollDice();
             Console.WriteLine("Jet d'attaque : " + jetAttaque.ToString());
-            int jetDefense = persoAAttaquer.GetDefense() + rand.Next(1, 100);
+            int jetDefense = persoAAttaquer.GetDefense() + RollDice();
             Console.WriteLine("Jet de défense : " + jetDefense.ToString());
             if (jetAttaque - jetDefense > 0)
             {
@@ -108,6 +107,11 @@ namespace DM_JDR_Console.Characters
         public override void Passive()
         {
             base.Passive();
+        }
+
+        public override int RollDice()
+        {
+            return base.RollDice();
         }
     }
 }

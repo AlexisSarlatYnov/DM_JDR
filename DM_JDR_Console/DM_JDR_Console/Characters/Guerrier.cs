@@ -50,6 +50,11 @@ namespace DM_JDR_Console.Characters
             base.Passive();
         }
 
+        public override int RollDice()
+        {
+            return base.RollDice();
+        }
+
         public class AppelPowerEventArgs : EventArgs
         {
             public float bonusAttackSpeed { get; set; }

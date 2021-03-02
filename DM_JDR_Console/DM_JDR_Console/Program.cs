@@ -18,8 +18,8 @@ namespace DM_JDR_Console
             //TestBerserker();
             //TestZombie();
             //TestEvent();
-            TestGuerrier();
-            //TestPaladin();
+            //TestGuerrier();
+            TestPaladin();
         }
 
         public static void TestBerserker()

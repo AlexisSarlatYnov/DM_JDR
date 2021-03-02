@@ -110,5 +110,10 @@ namespace DM_JDR_Console.Characters
                 this.SetAffectedByAttackDelay(true);
             }
         }
+
+        public override int RollDice()
+        {
+            return base.RollDice();
+        }
     }
 }

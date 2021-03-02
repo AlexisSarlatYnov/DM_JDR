@@ -229,7 +229,11 @@ namespace DM_JDR_Console.Characters
 
         }
 
-
+        public virtual int RollDice()
+        {
+            Random rand = new Random();
+            return rand.Next(1, 101);
+        }
 
 
 

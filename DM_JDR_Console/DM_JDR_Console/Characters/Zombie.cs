@@ -129,5 +129,10 @@ namespace DM_JDR_Console.Characters
                 this.SetIsUndead(true);
             }
         }
+
+        public override int RollDice()
+        {
+            return base.RollDice();
+        }
     }
 }

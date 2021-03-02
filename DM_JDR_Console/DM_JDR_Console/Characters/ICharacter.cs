@@ -10,5 +10,6 @@ namespace DM_JDR_Console.Characters
     {
         void Power(List<Character> characters);
         void Passive();
+        int RollDice();
     }
 }
