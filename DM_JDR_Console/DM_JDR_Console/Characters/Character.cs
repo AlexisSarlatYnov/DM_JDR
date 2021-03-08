@@ -26,6 +26,26 @@ namespace DM_JDR_Console.Characters
         public bool canBePoisoned;
         public int stackPoison = 0;
         
+        public Character()
+        {
+            this.attack = 75;
+            this.defense = 75;
+            this.attackSpeed = 1f;
+            this.damages = 30;
+            this.maximumLife = 200;
+            this.currentLife = 200;
+            this.powerSpeed = 1f;
+            this.isUndead = false;
+            this.hitRadiantDamages = false;
+            this.isHidden = false;
+            this.isEaten = false;
+            this.affectedByAttackDelay = true;
+            this.isHited = false;
+            this.delay = 0;
+            this.canBePoisoned = true;
+            this.stackPoison = 0;
+        }
+
         public Character(string name)
         {
             this.name = name;
