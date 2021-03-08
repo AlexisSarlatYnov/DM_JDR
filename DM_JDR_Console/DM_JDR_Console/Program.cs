@@ -24,8 +24,8 @@ namespace DM_JDR_Console
 
         public static void TestBerserker()
         {
-            Berserker charac1 = new Berserker();
-            //Berserker charac2 = new Berserker();
+            Berserker charac1 = new Berserker("A");
+            //Berserker charac2 = new Berserker("B");
             Console.WriteLine("Attack du charac 1 : " + charac1.GetAttack().ToString());
             Console.WriteLine("Damages du charac 1 : " + charac1.GetDamages().ToString());
             Console.WriteLine("AttackSpeed du charac 1 : " + charac1.GetAttackSpeed().ToString());
@@ -53,11 +53,11 @@ namespace DM_JDR_Console
 
         public static void TestZombie()
         {
-            Zombie zombie1 = new Zombie();
-            Zombie zombie2 = new Zombie();
-            Berserker berserker1 = new Berserker();
-            Berserker berserker2 = new Berserker();
-            Berserker berserker3 = new Berserker();
+            Zombie zombie1 = new Zombie("Y");
+            Zombie zombie2 = new Zombie("Z");
+            Berserker berserker1 = new Berserker("A");
+            Berserker berserker2 = new Berserker("B");
+            Berserker berserker3 = new Berserker("C");
             characters.Add(zombie1);
             characters.Add(zombie2);
             characters.Add(berserker1);
@@ -105,8 +105,8 @@ namespace DM_JDR_Console
                 
         public static void TestGuerrier()
         {
-            Guerrier guerrier1 = new Guerrier();
-            Guerrier guerrier2 = new Guerrier();
+            Guerrier guerrier1 = new Guerrier("A");
+            Guerrier guerrier2 = new Guerrier("B");
             guerrier1.appelPower += g_appelPower;
             guerrier2.appelPower += g_appelPower;
             Console.WriteLine("AttackSpeed de guerrier1 : " + guerrier1.GetAttackSpeed().ToString());
@@ -153,9 +153,9 @@ namespace DM_JDR_Console
 
         public static void TestPaladin()
         {
-            Paladin paladin1 = new Paladin();
-            Paladin paladin2 = new Paladin();
-            Zombie zombie = new Zombie();
+            Paladin paladin1 = new Paladin("A");
+            Paladin paladin2 = new Paladin("B");
+            Zombie zombie = new Zombie("Z");
             Console.WriteLine("Paladin 1 est touché ? " + paladin1.GetIsHited().ToString());
             Console.WriteLine("Paladin 2 est touché ? " + paladin2.GetIsHited().ToString());
             Console.WriteLine("Paladin 1 est affecté par un délai ? " + paladin1.GetAffectedByAttackDelay().ToString());

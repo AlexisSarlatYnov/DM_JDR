@@ -8,6 +8,7 @@ namespace DM_JDR_Console.Characters
 {
     class Character
     {
+        public string name;
         public int attack;
         public int defense;
         public float attackSpeed;
@@ -22,9 +23,12 @@ namespace DM_JDR_Console.Characters
         public bool affectedByAttackDelay;
         public bool isHited;
         public int delay;
+        public bool canBePoisoned;
+        public int stackPoison = 0;
         
-        public Character()
+        public Character(string name)
         {
+            this.name = name;
             this.attack = 75;
             this.defense = 75;
             this.attackSpeed = 1f;
@@ -39,10 +43,13 @@ namespace DM_JDR_Console.Characters
             this.affectedByAttackDelay = true;
             this.isHited = false;
             this.delay = 0;
+            this.canBePoisoned = true;
+            this.stackPoison = 0;
         }
 
-        public Character(int pattack, int pdefense, float pattackSpeed, int pdamages, int pmaximumLife, int pcurrentLife, float ppowerSpeed)
+        public Character(string name, int pattack, int pdefense, float pattackSpeed, int pdamages, int pmaximumLife, int pcurrentLife, float ppowerSpeed)
         {
+            this.name = name;
             this.attack = pattack;
             this.defense = pdefense;
             this.attackSpeed = pattackSpeed;
@@ -57,10 +64,13 @@ namespace DM_JDR_Console.Characters
             this.affectedByAttackDelay = true;
             this.isHited = false;
             this.delay = 0;
+            this.canBePoisoned = true;
+            this.stackPoison = 0;
         }
 
-        public Character(int pattack, int pdefense, float pattackSpeed, int pdamages, int pmaximumLife, int pcurrentLife, float ppowerSpeed, bool pisUndead, bool phitRadiantDamages, bool pisHidden, bool pisEaten, bool pAffectedByAttackDelay, bool pIsHited, int pdelay)
+        public Character(string name, int pattack, int pdefense, float pattackSpeed, int pdamages, int pmaximumLife, int pcurrentLife, float ppowerSpeed, bool pisUndead, bool phitRadiantDamages, bool pisHidden, bool pisEaten, bool pAffectedByAttackDelay, bool pIsHited, int pdelay, bool pcanBePoisoned, int pstackPoison)
         {
+            this.name = name;
             this.attack = pattack;
             this.defense = pdefense;
             this.attackSpeed = pattackSpeed;
@@ -75,6 +85,18 @@ namespace DM_JDR_Console.Characters
             this.affectedByAttackDelay = pAffectedByAttackDelay;
             this.isHited = pIsHited;
             this.delay = pdelay;
+            this.canBePoisoned = pcanBePoisoned;
+            this.stackPoison = pstackPoison;
+        }
+        
+        public string GetName()
+        {
+            return this.name;
+        }
+
+        public void SetName(string pName)
+        {
+            this.name = pName;
         }
 
         public int GetAttack()
@@ -217,16 +239,36 @@ namespace DM_JDR_Console.Characters
             this.delay = pDelay;
         }
 
+        public bool GetCanBePoisoned()
+        {
+            return this.canBePoisoned;
+        }
+
+        public void SetCanBePoisoned(bool pCanBePoisoned)
+        {
+            this.canBePoisoned = pCanBePoisoned;
+        }
+
+        public int GetStackPoison()
+        {
+            return this.stackPoison;
+        }
+
+        public void SetStackPoison(int pStackPoison)
+        {
+            this.stackPoison = pStackPoison;
+        }
+
 
 
         public virtual void Power(List<Character> characters)
         {
-
+            Console.WriteLine("Power de " + this.name + " activé !");
         }
 
         public virtual void Passive()
         {
-
+            Console.WriteLine("Passive de " + this.name + " activé !");
         }
 
         public virtual int RollDice()
@@ -234,6 +276,8 @@ namespace DM_JDR_Console.Characters
             Random rand = new Random();
             return rand.Next(1, 101);
         }
+
+        
 
 
 

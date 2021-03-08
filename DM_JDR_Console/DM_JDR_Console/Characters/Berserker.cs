@@ -13,8 +13,9 @@ namespace DM_JDR_Console.Characters
         public int lostLifeTotal = 0;
         public float initialAttackSpeed = 1.1f;
 
-        public Berserker()
+        public Berserker(string name)
         {
+            this.name = name;
             this.attack = 50;
             this.defense = 50;
             this.attackSpeed = 1.1f;

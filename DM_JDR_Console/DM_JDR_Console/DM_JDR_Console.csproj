@@ -48,6 +48,7 @@
     <Compile Include="Characters\Guerrier.cs" />
     <Compile Include="Characters\ICharacter.cs" />
     <Compile Include="Characters\Paladin.cs" />
+    <Compile Include="Characters\Robot.cs" />
     <Compile Include="Characters\Zombie.cs" />
     <Compile Include="FightManager.cs" />
     <Compile Include="Program.cs" />

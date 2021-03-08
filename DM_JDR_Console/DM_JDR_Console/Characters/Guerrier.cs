@@ -9,8 +9,9 @@ namespace DM_JDR_Console.Characters
     class Guerrier : Character, ICharacter
     {
         public event EventHandler<AppelPowerEventArgs> appelPower;
-        public Guerrier()
+        public Guerrier(string name)
         {
+            this.name = name;
             this.attack = 150;
             this.defense = 105;
             this.attackSpeed = 2.2f;

@@ -8,8 +8,9 @@ namespace DM_JDR_Console.Characters
 {
     class Paladin : Character, ICharacter
     {
-        public Paladin()
+        public Paladin(string name)
         {
+            this.name = name;
             this.attack = 60;
             this.defense = 145;
             this.attackSpeed = 1.6f;

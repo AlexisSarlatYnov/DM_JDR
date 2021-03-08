@@ -10,8 +10,9 @@ namespace DM_JDR_Console.Characters
     {
         Object _lock = new Object();
 
-        public Zombie()
+        public Zombie(string name)
         {
+            this.name = name;
             this.attack = 150;
             this.defense = 0;
             this.attackSpeed = 1f;
@@ -21,6 +22,7 @@ namespace DM_JDR_Console.Characters
             this.powerSpeed = 0.1f;
             this.isUndead = true;
             this.affectedByAttackDelay = false;
+            this.canBePoisoned = false;
         }
 
         /*public void ZombiePower(List<Character> characsAManger)
