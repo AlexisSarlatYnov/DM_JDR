@@ -28,7 +28,7 @@ namespace DM_JDR_Console.Characters
 
         public override void Power(List<Character> characters)
         {
-            base.Power(characters);
+            this.SetAttack((int)Math.Round(this.GetAttack() * 1.5f));
         }
 
         public override int RollDice()

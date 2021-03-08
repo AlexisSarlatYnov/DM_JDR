@@ -19,7 +19,8 @@ namespace DM_JDR_Console
             //TestZombie();
             //TestEvent();
             //TestGuerrier();
-            TestPaladin();
+            //TestPaladin();
+            TestRobot();
         }
 
         public static void TestBerserker()
@@ -203,7 +204,20 @@ namespace DM_JDR_Console
             Console.ReadLine();
         }
 
-
+        public static void TestRobot()
+        {
+            Robot robot = new Robot("A");
+            Console.WriteLine("Attack de " + robot.GetName() +" est de " + robot.GetAttack()+ " !");
+            robot.Power(characters);
+            Console.WriteLine("Attack de " + robot.GetName() + " est de " + robot.GetAttack() + " !");
+            robot.Power(characters);
+            Console.WriteLine("Attack de " + robot.GetName() + " est de " + robot.GetAttack() + " !");
+            robot.Power(characters);
+            Console.WriteLine("Attack de " + robot.GetName() + " est de " + robot.GetAttack() + " !");
+            robot.Power(characters);
+            Console.WriteLine("Attack de " + robot.GetName() + " est de " + robot.GetAttack() + " !");
+            Console.ReadLine();
+        }
 
 
 
