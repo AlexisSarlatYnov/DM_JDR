@@ -239,19 +239,14 @@ namespace DM_JDR_Console
             Console.WriteLine("CurrentLife de " + vampire.GetName() + " est de " + vampire.GetCurrentLife() + " !");
             vampire.Power(characters);
             charac.AttackTest(vampire, 100, 0);
-            //Thread.Sleep(5000);
             vampire.Power(characters);
             charac.AttackTest(vampire, 100, 0);
-            //Thread.Sleep(5000);
             vampire.Power(characters);
             charac.AttackTest(vampire, 100, 0);
-            //Thread.Sleep(5000);
             vampire.Power(characters);
             charac.AttackTest(vampire, 100, 0);
-            //Thread.Sleep(5000);
             vampire.Power(characters);
             charac.AttackTest(vampire, 100, 0);
-            //Thread.Sleep(5000);
             vampire.Power(characters);
             Console.ReadLine();
         }
