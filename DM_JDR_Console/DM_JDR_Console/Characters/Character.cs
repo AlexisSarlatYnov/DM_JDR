@@ -319,7 +319,7 @@ namespace DM_JDR_Console.Characters
                 //touché
                 persoAAttaquer.SetIsHited(true);
                 int damagesSubis = (jetAttaque - jetDefense) * this.GetDamages() / 100;
-                persoAAttaquer.SetCurrentLife(persoAAttaquer.GetCurrentLife() - damagesSubis);
+                persoAAttaquer.TakeDamages(damagesSubis);
                 if (persoAAttaquer.GetAffectedByAttackDelay() == true)
                 {
                     if(persoAAttaquer.GetCurrentLife() > 0)
@@ -344,7 +344,7 @@ namespace DM_JDR_Console.Characters
                 //touché
                 persoAAttaquer.SetIsHited(true);
                 int damagesSubis = (jetAttaque - jetDefense) * this.GetDamages() / 100;
-                persoAAttaquer.SetCurrentLife(persoAAttaquer.GetCurrentLife() - damagesSubis);
+                persoAAttaquer.TakeDamages(damagesSubis);
                 if (persoAAttaquer.GetAffectedByAttackDelay() == true)
                 {
                     if (persoAAttaquer.GetCurrentLife() > 0)
@@ -358,6 +358,11 @@ namespace DM_JDR_Console.Characters
                 //pas touché
 
             }
+        }
+
+        public virtual void TakeDamages(int damagesSubis)
+        {
+            this.SetCurrentLife(this.GetCurrentLife() - damagesSubis);
         }
     }
 }

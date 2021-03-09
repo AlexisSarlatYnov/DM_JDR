@@ -20,7 +20,8 @@ namespace DM_JDR_Console
             //TestEvent();
             //TestGuerrier();
             //TestPaladin();
-            TestRobot();
+            //TestRobot();
+            TestVampire();
         }
 
         public static void TestBerserker()
@@ -219,7 +220,41 @@ namespace DM_JDR_Console
             Console.ReadLine();
         }
 
-
+        public static void TestVampire()
+        {
+            Vampire vampire = new Vampire("V");
+            vampire.SetCurrentLife(50);
+            Character charac = new Character("C");
+            //Zombie zombie = new Zombie("Z");
+            Character charac2 = new Character("C2");
+            characters.Add(vampire);
+            characters.Add(charac);
+            //characters.Add(zombie);
+            characters.Add(charac2);
+            Console.WriteLine("CurrentLife de " + vampire.GetName() + " est de " + vampire.GetCurrentLife() + " !");
+            //vampire.AttackTest(zombie, 100, 0);
+            //vampire.AttackTest(charac, 100, 0);
+            Console.WriteLine("CurrentLife de " + vampire.GetName() + " est de " + vampire.GetCurrentLife() + " !");
+            //vampire.AttackTest(charac2, 100, 0);
+            Console.WriteLine("CurrentLife de " + vampire.GetName() + " est de " + vampire.GetCurrentLife() + " !");
+            vampire.Power(characters);
+            charac.AttackTest(vampire, 100, 0);
+            //Thread.Sleep(5000);
+            vampire.Power(characters);
+            charac.AttackTest(vampire, 100, 0);
+            //Thread.Sleep(5000);
+            vampire.Power(characters);
+            charac.AttackTest(vampire, 100, 0);
+            //Thread.Sleep(5000);
+            vampire.Power(characters);
+            charac.AttackTest(vampire, 100, 0);
+            //Thread.Sleep(5000);
+            vampire.Power(characters);
+            charac.AttackTest(vampire, 100, 0);
+            //Thread.Sleep(5000);
+            vampire.Power(characters);
+            Console.ReadLine();
+        }
 
 
 
