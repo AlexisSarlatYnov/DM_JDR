@@ -10,7 +10,6 @@ namespace DM_JDR_Console.Characters
     {
         public int totalDamagesBetweenPower = 0;
         public int soins = 0;
-        public Random rand;
         public Vampire(string name)
         {
             this.name = name;
@@ -147,17 +146,6 @@ namespace DM_JDR_Console.Characters
                 //pas touché
 
             }
-        }
-
-        public int NameToInt()
-        {
-            int result = 0;
-            foreach (char c in this.GetName())
-            {
-                result += c;
-            }
-
-            return result;
         }
 
         public override void AttackGenerale(List<Character> persosAAttaquer)

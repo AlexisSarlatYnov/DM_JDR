@@ -159,16 +159,5 @@ namespace DM_JDR_Console.Characters
             }
             return UndeadList;
         }
-
-        public int NameToInt()
-        {
-            int result = 0;
-            foreach (char c in this.GetName())
-            {
-                result += c;
-            }
-
-            return result;
-        }
     }
 }
