@@ -25,6 +25,7 @@ namespace DM_JDR_Console.Characters
         public int delay;
         public bool canBePoisoned;
         public int stackPoison = 0;
+        public Random rand;
         
         public Character()
         {
@@ -65,6 +66,7 @@ namespace DM_JDR_Console.Characters
             this.delay = 0;
             this.canBePoisoned = true;
             this.stackPoison = 0;
+            rand = new Random(NameToInt() + (int)DateTime.Now.Ticks);
         }
 
         public Character(string name, int pattack, int pdefense, float pattackSpeed, int pdamages, int pmaximumLife, int pcurrentLife, float ppowerSpeed)
@@ -86,6 +88,7 @@ namespace DM_JDR_Console.Characters
             this.delay = 0;
             this.canBePoisoned = true;
             this.stackPoison = 0;
+            rand = new Random(NameToInt() + (int)DateTime.Now.Ticks);
         }
 
         public Character(string name, int pattack, int pdefense, float pattackSpeed, int pdamages, int pmaximumLife, int pcurrentLife, float ppowerSpeed, bool pisUndead, bool phitRadiantDamages, bool pisHidden, bool pisEaten, bool pAffectedByAttackDelay, bool pIsHited, int pdelay, bool pcanBePoisoned, int pstackPoison)
@@ -107,6 +110,7 @@ namespace DM_JDR_Console.Characters
             this.delay = pdelay;
             this.canBePoisoned = pcanBePoisoned;
             this.stackPoison = pstackPoison;
+            rand = new Random(NameToInt() + (int)DateTime.Now.Ticks);
         }
         
         public string GetName()
@@ -293,7 +297,6 @@ namespace DM_JDR_Console.Characters
 
         public virtual int RollDice()
         {
-            Random rand = new Random();
             return rand.Next(1, 101);
         }
 
@@ -309,10 +312,9 @@ namespace DM_JDR_Console.Characters
         {
             persoAAttaquer.SetIsHited(false);
             persoAAttaquer.SetDelay(0);
-            Random rand = new Random();
-            int jetAttaque = this.GetAttack() + rand.Next(1,100);
+            int jetAttaque = this.GetAttack() + RollDice();
             Console.WriteLine("Jet d'attaque : " + jetAttaque.ToString());
-            int jetDefense = persoAAttaquer.GetDefense() + rand.Next(1, 100);
+            int jetDefense = persoAAttaquer.GetDefense() + RollDice();
             Console.WriteLine("Jet de défense : " + jetDefense.ToString());
             if (jetAttaque - jetDefense > 0)
             {
@@ -360,9 +362,56 @@ namespace DM_JDR_Console.Characters
             }
         }
 
+        public virtual void AttackGenerale(List<Character> persosAAttaquer)
+        {
+            int index = rand.Next(persosAAttaquer.Count);
+            while (index == persosAAttaquer.IndexOf(this))
+            {
+                index = rand.Next(persosAAttaquer.Count);
+            }
+            Character persoAAttaquer = persosAAttaquer[index];
+            Console.WriteLine("Le perso attaqué est " + persoAAttaquer.GetName() + " !");
+            persoAAttaquer.SetIsHited(false);
+            persoAAttaquer.SetDelay(0);
+            int jetAttaque = this.GetAttack() + RollDice();
+            Console.WriteLine("Jet d'attaque : " + jetAttaque.ToString());
+            int jetDefense = persoAAttaquer.GetDefense() + RollDice();
+            Console.WriteLine("Jet de défense : " + jetDefense.ToString());
+            if (jetAttaque - jetDefense > 0)
+            {
+                //touché
+                persoAAttaquer.SetIsHited(true);
+                int damagesSubis = (jetAttaque - jetDefense) * this.GetDamages() / 100;
+                persoAAttaquer.TakeDamages(damagesSubis);
+                if (persoAAttaquer.GetAffectedByAttackDelay() == true)
+                {
+                    if (persoAAttaquer.GetCurrentLife() > 0)
+                    {
+                        persoAAttaquer.SetDelay(damagesSubis);
+                    }
+                }
+            }
+            else
+            {
+                //pas touché
+
+            }
+        }
+
         public virtual void TakeDamages(int damagesSubis)
         {
             this.SetCurrentLife(this.GetCurrentLife() - damagesSubis);
+        }
+
+        public virtual int NameToInt()
+        {
+            int result = 0;
+            foreach (char c in this.GetName())
+            {
+                result += c;
+            }
+
+            return result;
         }
     }
 }

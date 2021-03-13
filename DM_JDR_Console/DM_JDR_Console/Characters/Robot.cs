@@ -19,6 +19,7 @@ namespace DM_JDR_Console.Characters
             this.currentLife = 275;
             this.powerSpeed = 0.5f;
             this.canBePoisoned = false;
+            rand = new Random(NameToInt() + (int)DateTime.Now.Ticks);
         }
 
         public override void Passive()

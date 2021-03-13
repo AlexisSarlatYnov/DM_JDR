@@ -23,6 +23,7 @@ namespace DM_JDR_Console.Characters
             this.isUndead = true;
             this.affectedByAttackDelay = false;
             this.canBePoisoned = false;
+            rand = new Random(NameToInt() + (int)DateTime.Now.Ticks);
         }
 
         /*public void ZombiePower(List<Character> characsAManger)
@@ -82,7 +83,6 @@ namespace DM_JDR_Console.Characters
         {
             Character characAManger;
             List<Character> characsSelection = new List<Character>();
-            Random random = new Random();
             foreach (Character personnage in characters)
             {
                 if (personnage.GetIsEaten() == false && personnage.GetCurrentLife() == 0)
@@ -97,7 +97,7 @@ namespace DM_JDR_Console.Characters
             }
             else
             {
-                int index = random.Next(characsSelection.Count);
+                int index = rand.Next(characsSelection.Count);
                 characAManger = characsSelection[index];
                 Console.WriteLine(characsSelection[index]);
 

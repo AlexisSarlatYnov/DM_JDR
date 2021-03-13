@@ -159,5 +159,44 @@ namespace DM_JDR_Console.Characters
 
             return result;
         }
+
+        public override void AttackGenerale(List<Character> persosAAttaquer)
+        {
+            Random rand = new Random();
+            int index = rand.Next(persosAAttaquer.Count);
+            while (index == persosAAttaquer.IndexOf(this))
+            {
+                index = rand.Next(persosAAttaquer.Count);
+            }
+            Character persoAAttaquer = persosAAttaquer[index];
+            Console.WriteLine("Le perso attaqué est " + persoAAttaquer.GetName() + " !");
+            persoAAttaquer.SetIsHited(false);
+            persoAAttaquer.SetDelay(0);
+            int jetAttaque = this.GetAttack() + RollDice();
+            Console.WriteLine("Jet d'attaque : " + jetAttaque.ToString());
+            int jetDefense = persoAAttaquer.GetDefense() + RollDice();
+            Console.WriteLine("Jet de défense : " + jetDefense.ToString());
+            if (jetAttaque - jetDefense > 0)
+            {
+                //touché
+                persoAAttaquer.SetIsHited(true);
+                int damagesSubis = (jetAttaque - jetDefense) * this.GetDamages() / 100;
+                persoAAttaquer.TakeDamages(damagesSubis);
+                soins = SoinsVampiriques(damagesSubis);
+                this.Passive();
+                if (persoAAttaquer.GetAffectedByAttackDelay() == true)
+                {
+                    if (persoAAttaquer.GetCurrentLife() > 0)
+                    {
+                        persoAAttaquer.SetDelay(damagesSubis);
+                    }
+                }
+            }
+            else
+            {
+                //pas touché
+
+            }
+        }
     }
 }

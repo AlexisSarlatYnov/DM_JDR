@@ -21,7 +21,8 @@ namespace DM_JDR_Console
             //TestGuerrier();
             //TestPaladin();
             //TestRobot();
-            TestVampire();
+            //TestVampire();
+            TestPretre();
         }
 
         public static void TestBerserker()
@@ -251,7 +252,37 @@ namespace DM_JDR_Console
             Console.ReadLine();
         }
 
-
+        public static void TestPretre()
+        {
+            Pretre pretre = new Pretre("A");
+            Vampire vampire = new Vampire("V");
+            Zombie zombie = new Zombie("Z");
+            Berserker berserker = new Berserker("B");
+            characters.Add(pretre);
+            characters.Add(vampire);
+            characters.Add(zombie);
+            characters.Add(berserker);
+            pretre.SetCurrentLife(100);
+            Console.WriteLine("Vie de " + pretre.GetName() + " est de " + pretre.GetCurrentLife() + " !");
+            pretre.Power(characters);
+            Console.WriteLine("Vie de " + pretre.GetName() + " est de " + pretre.GetCurrentLife() + " !");
+            pretre.Power(characters);
+            Console.WriteLine("Vie de " + pretre.GetName() + " est de " + pretre.GetCurrentLife() + " !");
+            pretre.Power(characters);
+            Console.WriteLine("Vie de " + pretre.GetName() + " est de " + pretre.GetCurrentLife() + " !");
+            pretre.Power(characters);
+            Console.WriteLine("Vie de " + pretre.GetName() + " est de " + pretre.GetCurrentLife() + " !");
+            pretre.Power(characters);
+            Console.WriteLine("Vie de " + pretre.GetName() + " est de " + pretre.GetCurrentLife() + " !");
+            pretre.Power(characters);
+            Console.WriteLine("Vie de " + pretre.GetName() + " est de " + pretre.GetCurrentLife() + " !");
+            pretre.AttackGenerale(characters);
+            pretre.AttackGenerale(characters);
+            pretre.AttackGenerale(characters);
+            pretre.AttackGenerale(characters);
+            pretre.AttackGenerale(characters);
+            Console.ReadLine();
+        }
 
 
 

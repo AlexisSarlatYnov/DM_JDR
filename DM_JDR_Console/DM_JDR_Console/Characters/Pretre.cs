@@ -6,37 +6,24 @@ using System.Threading.Tasks;
 
 namespace DM_JDR_Console.Characters
 {
-    class Paladin : Character, ICharacter
+    class Pretre : Character, ICharacter
     {
-        public Paladin(string name)
+        public Pretre(string name)
         {
             this.name = name;
-            this.attack = 60;
-            this.defense = 145;
-            this.attackSpeed = 1.6f;
-            this.damages = 40;
-            this.maximumLife = 250;
-            this.currentLife = 250;
-            this.powerSpeed = 0.5f;
+            this.attack = 100;
+            this.defense = 125;
+            this.attackSpeed = 1.5f;
+            this.damages = 90;
+            this.maximumLife = 150;
+            this.currentLife = 150;
+            this.powerSpeed = 1.0f;
             this.hitRadiantDamages = true;
             rand = new Random(NameToInt() + (int)DateTime.Now.Ticks);
         }
 
-        /*public void PaladinPower()
-        {
-            this.SetAffectedByAttackDelay(true);
-            if (this.GetIsHited() == true)
-            {
-                this.SetAffectedByAttackDelay(false);
-                this.SetDelay(0);
-            }
-        }*/
-
-
-
         public override void Attack(Character persoAAttaquer)
         {
-            //persoAAttaquer.SetAffectedByAttackDelay(true);
             persoAAttaquer.SetIsHited(false);
             persoAAttaquer.SetDelay(0);
             int jetAttaque = this.GetAttack() + RollDice();
@@ -48,12 +35,59 @@ namespace DM_JDR_Console.Characters
                 //touché
                 persoAAttaquer.SetIsHited(true);
                 int damagesSubis = (jetAttaque - jetDefense) * this.GetDamages() / 100;
-                if(persoAAttaquer.GetIsUndead() == true)
+                if (persoAAttaquer.GetIsUndead() == true)
                 {
                     damagesSubis = damagesSubis * 2;
                 }
-                //persoAAttaquer.SetCurrentLife(persoAAttaquer.GetCurrentLife() - damagesSubis);
-                TakeDamages(damagesSubis);
+                persoAAttaquer.SetCurrentLife(persoAAttaquer.GetCurrentLife() - damagesSubis);
+                if (persoAAttaquer.GetAffectedByAttackDelay() == true)
+                {
+                    if (persoAAttaquer.GetCurrentLife() > 0)
+                    {
+                        persoAAttaquer.SetDelay(damagesSubis);
+                    }
+                }
+            }
+            else
+            {
+                //pas touché
+
+            }
+        }
+
+        public override void AttackGenerale(List<Character> persosAAttaquer)
+        {
+            List<Character> UndeadList = UndeadPriority(persosAAttaquer);
+            int index = rand.Next(persosAAttaquer.Count);
+            while (index == persosAAttaquer.IndexOf(this))
+            {
+                index = rand.Next(persosAAttaquer.Count);
+            }
+            Character persoAAttaquer = persosAAttaquer[index];
+            Console.WriteLine("Le perso initialement attaqué est " + persoAAttaquer.GetName() + " !");
+            if (UndeadList.Count != 0)
+            {
+                Console.WriteLine("Il y a " + UndeadList.Count + " morts-vivants dans la liste de characters !");
+                index = rand.Next(UndeadList.Count);
+                persoAAttaquer = UndeadList[index];
+                Console.WriteLine("Le mort-vivant attaqué par " + this.GetName() + " est " + persoAAttaquer.GetName() + " !");
+            }
+            else
+            {
+                Console.WriteLine("Il y a " + UndeadList.Count + " morts-vivants dans la liste de characters !");
+            }
+            persoAAttaquer.SetIsHited(false);
+            persoAAttaquer.SetDelay(0);
+            int jetAttaque = this.GetAttack() + RollDice();
+            Console.WriteLine("Jet d'attaque : " + jetAttaque.ToString());
+            int jetDefense = persoAAttaquer.GetDefense() + RollDice();
+            Console.WriteLine("Jet de défense : " + jetDefense.ToString());
+            if (jetAttaque - jetDefense > 0)
+            {
+                //touché
+                persoAAttaquer.SetIsHited(true);
+                int damagesSubis = (jetAttaque - jetDefense) * this.GetDamages() / 100;
+                persoAAttaquer.TakeDamages(damagesSubis);
                 if (persoAAttaquer.GetAffectedByAttackDelay() == true)
                 {
                     if (persoAAttaquer.GetCurrentLife() > 0)
@@ -71,7 +105,6 @@ namespace DM_JDR_Console.Characters
 
         public override void AttackTest(Character persoAAttaquer, int jetAttaque, int jetDefense)
         {
-            //persoAAttaquer.SetAffectedByAttackDelay(true);
             persoAAttaquer.SetIsHited(false);
             persoAAttaquer.SetDelay(0);
             if (jetAttaque - jetDefense > 0)
@@ -100,64 +133,42 @@ namespace DM_JDR_Console.Characters
             }
         }
 
-        public override void Power(List<Character> characters)
-        {
-            this.SetAffectedByAttackDelay(true);
-            if (this.GetIsHited() == true)
-            {
-                this.SetAffectedByAttackDelay(false);
-                this.SetDelay(0);
-            }
-        }
-
         public override void Passive()
         {
             base.Passive();
         }
 
-        public override int RollDice()
+        public override void Power(List<Character> characters)
         {
-            return base.RollDice();
+            this.SetCurrentLife(this.GetCurrentLife() + (int)(this.GetMaximumLife() * 0.1f));
+            if (this.GetCurrentLife() > this.GetMaximumLife())
+            {
+                this.SetCurrentLife(this.GetMaximumLife());
+            }
         }
 
-        public override void AttackGenerale(List<Character> persosAAttaquer)
+        public List<Character> UndeadPriority(List<Character> characters)
         {
-            int index = rand.Next(persosAAttaquer.Count);
-            while (index == persosAAttaquer.IndexOf(this))
+            List<Character> UndeadList = new List<Character>();
+            for (int i = 0; i < characters.Count; i++)
             {
-                index = rand.Next(persosAAttaquer.Count);
-            }
-            Character persoAAttaquer = persosAAttaquer[index];
-            Console.WriteLine("Le perso attaqué est " + persoAAttaquer.GetName() + " !");
-            persoAAttaquer.SetIsHited(false);
-            persoAAttaquer.SetDelay(0);
-            int jetAttaque = this.GetAttack() + RollDice();
-            Console.WriteLine("Jet d'attaque : " + jetAttaque.ToString());
-            int jetDefense = persoAAttaquer.GetDefense() + RollDice();
-            Console.WriteLine("Jet de défense : " + jetDefense.ToString());
-            if (jetAttaque - jetDefense > 0)
-            {
-                //touché
-                persoAAttaquer.SetIsHited(true);
-                int damagesSubis = (jetAttaque - jetDefense) * this.GetDamages() / 100;
-                if (persoAAttaquer.GetIsUndead() == true)
+                if(characters[i].GetIsUndead() == true)
                 {
-                    damagesSubis = damagesSubis * 2;
-                }
-                persoAAttaquer.TakeDamages(damagesSubis);
-                if (persoAAttaquer.GetAffectedByAttackDelay() == true)
-                {
-                    if (persoAAttaquer.GetCurrentLife() > 0)
-                    {
-                        persoAAttaquer.SetDelay(damagesSubis);
-                    }
+                    UndeadList.Add(characters[i]);
                 }
             }
-            else
-            {
-                //pas touché
+            return UndeadList;
+        }
 
+        public int NameToInt()
+        {
+            int result = 0;
+            foreach (char c in this.GetName())
+            {
+                result += c;
             }
+
+            return result;
         }
     }
 }
