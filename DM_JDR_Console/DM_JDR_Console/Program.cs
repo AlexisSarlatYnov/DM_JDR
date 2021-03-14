@@ -22,7 +22,8 @@ namespace DM_JDR_Console
             //TestPaladin();
             //TestRobot();
             //TestVampire();
-            TestPretre();
+            //TestPretre();
+            TestMagicien();
         }
 
         public static void TestBerserker()
@@ -284,7 +285,26 @@ namespace DM_JDR_Console
             Console.ReadLine();
         }
 
-
+        public static void TestMagicien()
+        {
+            Magicien magicien = new Magicien("A");
+            Pretre pretre = new Pretre("P");
+            Vampire vampire = new Vampire("V");
+            Zombie zombie = new Zombie("Z");
+            Berserker berserker = new Berserker("B");
+            characters.Add(magicien);
+            characters.Add(pretre);
+            characters.Add(vampire);
+            characters.Add(zombie);
+            characters.Add(berserker);
+            Console.WriteLine("Le Magicien " + magicien.GetName() + " utilise son pouvoir !");
+            magicien.Power(characters);
+            /*Console.WriteLine("Le Magicien " + magicien.GetName() + " utilise son pouvoir !");
+            magicien.Power(characters);
+            Console.WriteLine("Le Magicien " + magicien.GetName() + " utilise son pouvoir !");
+            magicien.Power(characters);*/
+            Console.ReadLine();
+        }
 
 
 

@@ -400,6 +400,7 @@ namespace DM_JDR_Console.Characters
 
         public virtual void TakeDamages(int damagesSubis)
         {
+            Console.WriteLine(this.GetName() + " subit " + damagesSubis.ToString() + " dégâts !");
             this.SetCurrentLife(this.GetCurrentLife() - damagesSubis);
         }
 
