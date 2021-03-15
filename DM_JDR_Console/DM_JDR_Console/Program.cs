@@ -25,7 +25,8 @@ namespace DM_JDR_Console
             //TestVampire();
             //TestPretre();
             //TestMagicien();
-            TestIllusioniste();
+            //TestIllusioniste();
+            TestAlchimiste();
         }
 
         public static void TestBerserker()
@@ -367,6 +368,41 @@ namespace DM_JDR_Console
         {
             Console.WriteLine("A IllusionOf died !");
         }
+
+
+        public static void TestAlchimiste()
+        {
+            Alchimiste alchimiste = new Alchimiste("A");
+            Character character1 = new Character("C1");
+            Character character2 = new Character("C2");
+            Character character3 = new Character("C3");
+            Character character4 = new Character("C4");
+            Character character5 = new Character("C5");
+            Zombie zombie = new Zombie("Z");
+            characters.Add(alchimiste);
+            characters.Add(character1);
+            characters.Add(character2);
+            characters.Add(character3);
+            characters.Add(character4);
+            characters.Add(character5);
+            characters.Add(zombie);
+            alchimiste.SetCurrentLife(50);
+            Console.WriteLine(alchimiste.GetName() + " utilise son pouvoir !");
+            alchimiste.Power(characters, charactersEaten);
+            Console.WriteLine(alchimiste.GetName() + " attaque !");
+            alchimiste.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(alchimiste.GetName() + " attaque !");
+            alchimiste.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(alchimiste.GetName() + " attaque !");
+            alchimiste.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(alchimiste.GetName() + " attaque !");
+            alchimiste.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(alchimiste.GetName() + " attaque !");
+            alchimiste.AttackGenerale(characters, charactersEaten);
+            Console.ReadLine();
+        }
+
+
 
 
 

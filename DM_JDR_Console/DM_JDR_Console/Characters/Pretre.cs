@@ -62,7 +62,7 @@ namespace DM_JDR_Console.Characters
             if (persosAAttaquer.Count > 0)
             {
                 int index = rand.Next(persosAAttaquer.Count);
-                while (index == persosAAttaquer.IndexOf(this) && persosAAttaquer.Count > 0)
+                while (index == persosAAttaquer.IndexOf(this) && persosAAttaquer.Count > 0 && persosAAttaquer[index].GetIsHidden() == true)
                 {
                     index = rand.Next(persosAAttaquer.Count);
                 }
@@ -111,7 +111,7 @@ namespace DM_JDR_Console.Characters
                 else
                 {
                     //pas touché
-
+                    Console.WriteLine(persoAAttaquer.GetName() + " se défend !");
                 }
             }
             else
@@ -169,7 +169,7 @@ namespace DM_JDR_Console.Characters
             List<Character> UndeadList = new List<Character>();
             for (int i = 0; i < characters.Count; i++)
             {
-                if(characters[i].GetIsUndead() == true)
+                if(characters[i].GetIsUndead() == true && characters[i].GetIsHidden() == false)
                 {
                     UndeadList.Add(characters[i]);
                 }

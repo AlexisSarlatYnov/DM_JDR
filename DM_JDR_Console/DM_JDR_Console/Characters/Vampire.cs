@@ -155,7 +155,7 @@ namespace DM_JDR_Console.Characters
             if (persosAAttaquer.Count > 0)
             {
                 int index = rand.Next(persosAAttaquer.Count);
-                while (index == persosAAttaquer.IndexOf(this) && persosAAttaquer.Count > 0)
+                while (index == persosAAttaquer.IndexOf(this) && persosAAttaquer.Count > 0 && persosAAttaquer[index].GetIsHidden() == true)
                 {
                     index = rand.Next(persosAAttaquer.Count);
                 }
@@ -195,7 +195,7 @@ namespace DM_JDR_Console.Characters
                 else
                 {
                     //pas touché
-
+                    Console.WriteLine(persoAAttaquer.GetName() + " se défend !");
                 }
             }
             else
