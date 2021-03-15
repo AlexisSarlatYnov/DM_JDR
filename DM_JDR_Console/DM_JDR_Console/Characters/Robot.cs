@@ -22,6 +22,11 @@ namespace DM_JDR_Console.Characters
             rand = new Random(NameToInt() + (int)DateTime.Now.Ticks);
         }
 
+        public override void AttackGenerale(List<Character> persosAAttaquer, List<Character> charactersEaten)
+        {
+            base.AttackGenerale(persosAAttaquer, charactersEaten);
+        }
+
         public override void Passive()
         {
             base.Passive();

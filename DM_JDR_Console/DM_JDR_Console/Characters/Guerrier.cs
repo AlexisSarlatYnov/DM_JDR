@@ -56,6 +56,11 @@ namespace DM_JDR_Console.Characters
             return base.RollDice();
         }
 
+        public override void AttackGenerale(List<Character> persosAAttaquer, List<Character> charactersEaten)
+        {
+            base.AttackGenerale(persosAAttaquer, charactersEaten);
+        }
+
         public class AppelPowerEventArgs : EventArgs
         {
             public float bonusAttackSpeed { get; set; }
