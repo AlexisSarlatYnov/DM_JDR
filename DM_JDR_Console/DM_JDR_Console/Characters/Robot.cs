@@ -27,7 +27,7 @@ namespace DM_JDR_Console.Characters
             base.Passive();
         }
 
-        public override void Power(List<Character> characters)
+        public override void Power(List<Character> characters, List<Character> charactersEaten)
         {
             this.SetAttack((int)Math.Round(this.GetAttack() * 1.5f));
         }

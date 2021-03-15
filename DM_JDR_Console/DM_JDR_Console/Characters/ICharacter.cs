@@ -8,7 +8,7 @@ namespace DM_JDR_Console.Characters
 {
     interface ICharacter
     {
-        void Power(List<Character> characters);
+        void Power(List<Character> characters, List<Character> charactersEaten);
         void Passive();
         int RollDice();
         void TakeDamages(int damagesSubis);

@@ -38,7 +38,7 @@ namespace DM_JDR_Console.Characters
             }
         }
 
-        public override void Power(List<Character> characters)
+        public override void Power(List<Character> characters, List<Character> charactersEaten)
         {
             AppelPowerEventArgs args = new AppelPowerEventArgs();
             args.bonusAttackSpeed = 0.5f;

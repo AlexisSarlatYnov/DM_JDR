@@ -13,6 +13,7 @@ namespace DM_JDR_Console
     class Program
     {
         public static List<Character> characters = new List<Character>();
+        public static List<Character> charactersEaten = new List<Character>();
         static void Main(string[] args)
         {
             //TestBerserker();
@@ -23,7 +24,8 @@ namespace DM_JDR_Console
             //TestRobot();
             //TestVampire();
             //TestPretre();
-            TestMagicien();
+            //TestMagicien();
+            TestIllusioniste();
         }
 
         public static void TestBerserker()
@@ -40,7 +42,7 @@ namespace DM_JDR_Console
             charac1.SetLostLifeInAHit(100);
             Console.WriteLine("Vie perdue en une attaque du charac 1 : " + charac1.GetLostLifeInAHit().ToString());
             charac1.SetCurrentLife(charac1.GetCurrentLife() - charac1.GetLostLifeInAHit());
-            charac1.Power(characters);
+            charac1.Power(characters, charactersEaten);
             charac1.Passive();
             Console.WriteLine("Attack du charac 1 : " + charac1.GetAttack().ToString());
             Console.WriteLine("Damages du charac 1 : " + charac1.GetDamages().ToString());
@@ -81,19 +83,19 @@ namespace DM_JDR_Console
             Console.WriteLine("Berserker1 est mangé : " + berserker1.GetIsEaten());
             Console.WriteLine("Berserker2 est mangé : " + berserker2.GetIsEaten());
             Console.WriteLine("Berserker3 est mangé : " + berserker3.GetIsEaten());
-            zombie1.Power(characters);
+            zombie1.Power(characters, charactersEaten);
             Console.WriteLine("Zombie1 est mangé : " + zombie1.GetIsEaten());
             Console.WriteLine("Zombie2 est mangé : " + zombie2.GetIsEaten());
             Console.WriteLine("Berserker1 est mangé : " + berserker1.GetIsEaten());
             Console.WriteLine("Berserker2 est mangé : " + berserker2.GetIsEaten());
             Console.WriteLine("Berserker3 est mangé : " + berserker3.GetIsEaten());
-            zombie1.Power(characters);
+            zombie1.Power(characters, charactersEaten);
             Console.WriteLine("Zombie1 est mangé : " + zombie1.GetIsEaten());
             Console.WriteLine("Zombie2 est mangé : " + zombie2.GetIsEaten());
             Console.WriteLine("Berserker1 est mangé : " + berserker1.GetIsEaten());
             Console.WriteLine("Berserker2 est mangé : " + berserker2.GetIsEaten());
             Console.WriteLine("Berserker3 est mangé : " + berserker3.GetIsEaten());
-            zombie1.Power(characters);
+            zombie1.Power(characters, charactersEaten);
             Console.WriteLine("Zombie1 est mangé : " + zombie1.GetIsEaten());
             Console.WriteLine("Zombie2 est mangé : " + zombie2.GetIsEaten());
             Console.WriteLine("Berserker1 est mangé : " + berserker1.GetIsEaten());
@@ -115,19 +117,19 @@ namespace DM_JDR_Console
             guerrier2.appelPower += g_appelPower;
             Console.WriteLine("AttackSpeed de guerrier1 : " + guerrier1.GetAttackSpeed().ToString());
             Console.WriteLine("AttackSpeed de guerrier2 : " + guerrier2.GetAttackSpeed().ToString());
-            guerrier1.Power(characters);
+            guerrier1.Power(characters, charactersEaten);
             Console.WriteLine("AttackSpeed de guerrier1 : " + guerrier1.GetAttackSpeed().ToString());
             Console.WriteLine("AttackSpeed de guerrier2 : " + guerrier2.GetAttackSpeed().ToString());
             Thread.Sleep(1000);
-            guerrier1.Power(characters);
+            guerrier1.Power(characters, charactersEaten);
             Console.WriteLine("AttackSpeed de guerrier1 : " + guerrier1.GetAttackSpeed().ToString());
             Console.WriteLine("AttackSpeed de guerrier2 : " + guerrier2.GetAttackSpeed().ToString());
             Thread.Sleep(1000);
-            guerrier1.Power(characters);
+            guerrier1.Power(characters, charactersEaten);
             Console.WriteLine("AttackSpeed de guerrier1 : " + guerrier1.GetAttackSpeed().ToString());
             Console.WriteLine("AttackSpeed de guerrier2 : " + guerrier2.GetAttackSpeed().ToString());
             Thread.Sleep(1000);
-            guerrier1.Power(characters);
+            guerrier1.Power(characters, charactersEaten);
             Console.WriteLine("AttackSpeed de guerrier1 : " + guerrier1.GetAttackSpeed().ToString());
             Console.WriteLine("AttackSpeed de guerrier2 : " + guerrier2.GetAttackSpeed().ToString());
             Thread.Sleep(4000);
@@ -170,7 +172,7 @@ namespace DM_JDR_Console
             Console.WriteLine("Vie du paladin 2 : " + paladin2.GetCurrentLife().ToString());
             Console.WriteLine("L'attaque va réussir !");
             paladin1.AttackTest(paladin2, 100, 10);
-            paladin2.Power(characters);
+            paladin2.Power(characters, charactersEaten);
             Console.WriteLine("Paladin 1 est touché ? " + paladin1.GetIsHited().ToString());
             Console.WriteLine("Paladin 2 est touché ? " + paladin2.GetIsHited().ToString());
             Console.WriteLine("Paladin 1 est affecté par un délai ? " + paladin1.GetAffectedByAttackDelay().ToString());
@@ -191,7 +193,7 @@ namespace DM_JDR_Console
             Console.WriteLine("Vie du paladin 2 : " + paladin2.GetCurrentLife().ToString());
             Console.WriteLine("L'attaque va échouer !");
             paladin1.AttackTest(paladin2, 10, 100);
-            paladin2.Power(characters);
+            paladin2.Power(characters, charactersEaten);
             Console.WriteLine("Paladin 1 est touché ? " + paladin1.GetIsHited().ToString());
             Console.WriteLine("Paladin 2 est touché ? " + paladin2.GetIsHited().ToString());
             Console.WriteLine("Paladin 1 est affecté par un délai ? " + paladin1.GetAffectedByAttackDelay().ToString());
@@ -211,13 +213,13 @@ namespace DM_JDR_Console
         {
             Robot robot = new Robot("A");
             Console.WriteLine("Attack de " + robot.GetName() +" est de " + robot.GetAttack()+ " !");
-            robot.Power(characters);
+            robot.Power(characters, charactersEaten);
             Console.WriteLine("Attack de " + robot.GetName() + " est de " + robot.GetAttack() + " !");
-            robot.Power(characters);
+            robot.Power(characters, charactersEaten);
             Console.WriteLine("Attack de " + robot.GetName() + " est de " + robot.GetAttack() + " !");
-            robot.Power(characters);
+            robot.Power(characters, charactersEaten);
             Console.WriteLine("Attack de " + robot.GetName() + " est de " + robot.GetAttack() + " !");
-            robot.Power(characters);
+            robot.Power(characters, charactersEaten);
             Console.WriteLine("Attack de " + robot.GetName() + " est de " + robot.GetAttack() + " !");
             Console.ReadLine();
         }
@@ -239,17 +241,17 @@ namespace DM_JDR_Console
             Console.WriteLine("CurrentLife de " + vampire.GetName() + " est de " + vampire.GetCurrentLife() + " !");
             //vampire.AttackTest(charac2, 100, 0);
             Console.WriteLine("CurrentLife de " + vampire.GetName() + " est de " + vampire.GetCurrentLife() + " !");
-            vampire.Power(characters);
+            vampire.Power(characters, charactersEaten);
             charac.AttackTest(vampire, 100, 0);
-            vampire.Power(characters);
+            vampire.Power(characters, charactersEaten);
             charac.AttackTest(vampire, 100, 0);
-            vampire.Power(characters);
+            vampire.Power(characters, charactersEaten);
             charac.AttackTest(vampire, 100, 0);
-            vampire.Power(characters);
+            vampire.Power(characters, charactersEaten);
             charac.AttackTest(vampire, 100, 0);
-            vampire.Power(characters);
+            vampire.Power(characters, charactersEaten);
             charac.AttackTest(vampire, 100, 0);
-            vampire.Power(characters);
+            vampire.Power(characters, charactersEaten);
             Console.ReadLine();
         }
 
@@ -265,23 +267,23 @@ namespace DM_JDR_Console
             characters.Add(berserker);
             pretre.SetCurrentLife(100);
             Console.WriteLine("Vie de " + pretre.GetName() + " est de " + pretre.GetCurrentLife() + " !");
-            pretre.Power(characters);
+            pretre.Power(characters, charactersEaten);
             Console.WriteLine("Vie de " + pretre.GetName() + " est de " + pretre.GetCurrentLife() + " !");
-            pretre.Power(characters);
+            pretre.Power(characters, charactersEaten);
             Console.WriteLine("Vie de " + pretre.GetName() + " est de " + pretre.GetCurrentLife() + " !");
-            pretre.Power(characters);
+            pretre.Power(characters, charactersEaten);
             Console.WriteLine("Vie de " + pretre.GetName() + " est de " + pretre.GetCurrentLife() + " !");
-            pretre.Power(characters);
+            pretre.Power(characters, charactersEaten);
             Console.WriteLine("Vie de " + pretre.GetName() + " est de " + pretre.GetCurrentLife() + " !");
-            pretre.Power(characters);
+            pretre.Power(characters, charactersEaten);
             Console.WriteLine("Vie de " + pretre.GetName() + " est de " + pretre.GetCurrentLife() + " !");
-            pretre.Power(characters);
+            pretre.Power(characters, charactersEaten);
             Console.WriteLine("Vie de " + pretre.GetName() + " est de " + pretre.GetCurrentLife() + " !");
-            pretre.AttackGenerale(characters);
-            pretre.AttackGenerale(characters);
-            pretre.AttackGenerale(characters);
-            pretre.AttackGenerale(characters);
-            pretre.AttackGenerale(characters);
+            pretre.AttackGenerale(characters, charactersEaten);
+            pretre.AttackGenerale(characters, charactersEaten);
+            pretre.AttackGenerale(characters, charactersEaten);
+            pretre.AttackGenerale(characters, charactersEaten);
+            pretre.AttackGenerale(characters, charactersEaten);
             Console.ReadLine();
         }
 
@@ -298,17 +300,73 @@ namespace DM_JDR_Console
             characters.Add(zombie);
             characters.Add(berserker);
             Console.WriteLine("Le Magicien " + magicien.GetName() + " utilise son pouvoir !");
-            magicien.Power(characters);
+            magicien.Power(characters, charactersEaten);
             /*Console.WriteLine("Le Magicien " + magicien.GetName() + " utilise son pouvoir !");
-            magicien.Power(characters);
+            magicien.Power(characters, charactersEaten);
             Console.WriteLine("Le Magicien " + magicien.GetName() + " utilise son pouvoir !");
-            magicien.Power(characters);*/
+            magicien.Power(characters, charactersEaten);*/
             Console.ReadLine();
         }
 
+        public static void TestIllusioniste()
+        {
+            Illusioniste illusioniste = new Illusioniste("A");
+            Console.WriteLine(illusioniste.GetName() + " a une attack de " + illusioniste.GetAttack() + " !");
+            illusioniste.appelPowerIllusioniste += i_IllusionOfDead;
+            Character character = new Character("C");
+            //characters.Add(illusioniste);
+            //characters.Add(character);
+            illusioniste.Power(characters, charactersEaten);
+            Console.WriteLine(illusioniste.GetNbIllusionOf() + " illusions de " + illusioniste.GetName());
+            Console.WriteLine(illusioniste.GetName() + " a une attack de " + illusioniste.GetAttack() + " !");
+            illusioniste.Power(characters, charactersEaten);
+            Console.WriteLine(illusioniste.GetNbIllusionOf() + " illusions de " + illusioniste.GetName());
+            Console.WriteLine(illusioniste.GetName() + " a une attack de " + illusioniste.GetAttack() + " !");
+            illusioniste.Power(characters, charactersEaten);
+            Console.WriteLine(illusioniste.GetNbIllusionOf() + " illusions de " + illusioniste.GetName());
+            Console.WriteLine(illusioniste.GetName() + " a une attack de " + illusioniste.GetAttack() + " !");
+            illusioniste.Power(characters, charactersEaten);
+            Console.WriteLine(illusioniste.GetNbIllusionOf() + " illusions de " + illusioniste.GetName());
+            Console.WriteLine(illusioniste.GetName() + " a une attack de " + illusioniste.GetAttack() + " !");
+            Console.WriteLine(character.GetName() + " attaque !");
+            character.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(illusioniste.GetNbIllusionOf() + " illusions de " + illusioniste.GetName());
+            Console.WriteLine(illusioniste.GetName() + " a une attack de " + illusioniste.GetAttack() + " !");
+            Console.WriteLine(character.GetName() + " attaque !");
+            character.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(illusioniste.GetNbIllusionOf() + " illusions de " + illusioniste.GetName());
+            Console.WriteLine(illusioniste.GetName() + " a une attack de " + illusioniste.GetAttack() + " !");
+            Console.WriteLine(character.GetName() + " attaque !");
+            character.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(illusioniste.GetNbIllusionOf() + " illusions de " + illusioniste.GetName());
+            Console.WriteLine(illusioniste.GetName() + " a une attack de " + illusioniste.GetAttack() + " !");
+            Console.WriteLine(character.GetName() + " attaque !");
+            character.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(illusioniste.GetNbIllusionOf() + " illusions de " + illusioniste.GetName());
+            Console.WriteLine(illusioniste.GetName() + " a une attack de " + illusioniste.GetAttack() + " !");
+            Console.WriteLine(character.GetName() + " attaque !");
+            character.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(illusioniste.GetNbIllusionOf() + " illusions de " + illusioniste.GetName());
+            Console.WriteLine(illusioniste.GetName() + " a une attack de " + illusioniste.GetAttack() + " !");
+            Console.WriteLine(character.GetName() + " attaque !");
+            character.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(illusioniste.GetNbIllusionOf() + " illusions de " + illusioniste.GetName());
+            Console.WriteLine(illusioniste.GetName() + " a une attack de " + illusioniste.GetAttack() + " !");
+            Console.WriteLine(character.GetName() + " attaque !");
+            character.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(illusioniste.GetNbIllusionOf() + " illusions de " + illusioniste.GetName());
+            Console.WriteLine(illusioniste.GetName() + " a une attack de " + illusioniste.GetAttack() + " !");
+            Console.WriteLine(character.GetName() + " attaque !");
+            character.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(illusioniste.GetNbIllusionOf() + " illusions de " + illusioniste.GetName());
+            Console.WriteLine(illusioniste.GetName() + " a une attack de " + illusioniste.GetAttack() + " !");
+            Console.ReadLine();
+        }
 
-
-
+        static void i_IllusionOfDead(object sender, EventArgs e)
+        {
+            Console.WriteLine("A IllusionOf died !");
+        }
 
 
 

@@ -26,7 +26,11 @@ namespace DM_JDR_Console.Characters
         public bool canBePoisoned;
         public int stackPoison = 0;
         public Random rand;
-        
+        Object _lock = new Object();
+        public event EventHandler appelPowerIllusioniste;
+        public Character illusionisteParent;
+        public int nbIllusionOf = 0;
+
         public Character()
         {
             this.attack = 75;
@@ -45,6 +49,7 @@ namespace DM_JDR_Console.Characters
             this.delay = 0;
             this.canBePoisoned = true;
             this.stackPoison = 0;
+            this.illusionisteParent = null;
         }
 
         public Character(string name)
@@ -53,7 +58,7 @@ namespace DM_JDR_Console.Characters
             this.attack = 75;
             this.defense = 75;
             this.attackSpeed = 1f;
-            this.damages = 30;
+            this.damages = 2;
             this.maximumLife = 200;
             this.currentLife = 200;
             this.powerSpeed = 1f;
@@ -67,6 +72,8 @@ namespace DM_JDR_Console.Characters
             this.canBePoisoned = true;
             this.stackPoison = 0;
             rand = new Random(NameToInt() + (int)DateTime.Now.Ticks);
+            this.illusionisteParent = null;
+            this.nbIllusionOf = 0;
         }
 
         public Character(string name, int pattack, int pdefense, float pattackSpeed, int pdamages, int pmaximumLife, int pcurrentLife, float ppowerSpeed)
@@ -282,10 +289,22 @@ namespace DM_JDR_Console.Characters
         {
             this.stackPoison = pStackPoison;
         }
+        public Character GetIllusionisteParent()
+        {
+            return this.illusionisteParent;
+        }
+
+        public int GetNbIllusionOf()
+        {
+            return this.nbIllusionOf;
+        }
+        public void SetNbIllusionOf(int pNbIllusionOf)
+        {
+            this.nbIllusionOf = pNbIllusionOf;
+        }
 
 
-
-        public virtual void Power(List<Character> characters)
+        public virtual void Power(List<Character> characters, List<Character> charactersEaten)
         {
             Console.WriteLine("Power de " + this.name + " activé !");
         }
@@ -362,39 +381,57 @@ namespace DM_JDR_Console.Characters
             }
         }
 
-        public virtual void AttackGenerale(List<Character> persosAAttaquer)
+        public virtual void AttackGenerale(List<Character> persosAAttaquer, List<Character> charactersEaten)
         {
-            int index = rand.Next(persosAAttaquer.Count);
-            while (index == persosAAttaquer.IndexOf(this))
+            if (persosAAttaquer.Count > 0)
             {
-                index = rand.Next(persosAAttaquer.Count);
-            }
-            Character persoAAttaquer = persosAAttaquer[index];
-            Console.WriteLine("Le perso attaqué est " + persoAAttaquer.GetName() + " !");
-            persoAAttaquer.SetIsHited(false);
-            persoAAttaquer.SetDelay(0);
-            int jetAttaque = this.GetAttack() + RollDice();
-            Console.WriteLine("Jet d'attaque : " + jetAttaque.ToString());
-            int jetDefense = persoAAttaquer.GetDefense() + RollDice();
-            Console.WriteLine("Jet de défense : " + jetDefense.ToString());
-            if (jetAttaque - jetDefense > 0)
-            {
-                //touché
-                persoAAttaquer.SetIsHited(true);
-                int damagesSubis = (jetAttaque - jetDefense) * this.GetDamages() / 100;
-                persoAAttaquer.TakeDamages(damagesSubis);
-                if (persoAAttaquer.GetAffectedByAttackDelay() == true)
+                int index = rand.Next(persosAAttaquer.Count);
+                while (index == persosAAttaquer.IndexOf(this) && persosAAttaquer.Count > 0)
                 {
-                    if (persoAAttaquer.GetCurrentLife() > 0)
+                    index = rand.Next(persosAAttaquer.Count);
+                }
+                Console.WriteLine("Liste.Count = " + persosAAttaquer.Count.ToString());
+                Console.WriteLine("Index = " + index.ToString());
+                Character persoAAttaquer = persosAAttaquer[index];
+                Console.WriteLine("Le perso attaqué est " + persoAAttaquer.GetName() + " !");
+                persoAAttaquer.SetIsHited(false);
+                persoAAttaquer.SetDelay(0);
+                int jetAttaque = this.GetAttack() + RollDice();
+                Console.WriteLine("Jet d'attaque : " + jetAttaque.ToString());
+                int jetDefense = persoAAttaquer.GetDefense() + RollDice();
+                Console.WriteLine("Jet de défense : " + jetDefense.ToString());
+                if (jetAttaque - jetDefense > 0)
+                {
+                    //touché
+                    persoAAttaquer.SetIsHited(true);
+                    int damagesSubis = (jetAttaque - jetDefense) * this.GetDamages() / 100;
+                    persoAAttaquer.TakeDamages(damagesSubis);
+                    if (persoAAttaquer.GetAffectedByAttackDelay() == true && persoAAttaquer.GetCurrentLife() > 0)
                     {
                         persoAAttaquer.SetDelay(damagesSubis);
                     }
+                    if (persoAAttaquer is IllusionOf)
+                    {
+                        lock (_lock)
+                        {
+                            OnAppelPowerIllusioniste(EventArgs.Empty);
+                            persoAAttaquer.GetIllusionisteParent().SetNbIllusionOf(persoAAttaquer.GetIllusionisteParent().GetNbIllusionOf() - 1);
+                            persoAAttaquer.GetIllusionisteParent().Passive();
+                            charactersEaten.Add(persoAAttaquer);
+                            persosAAttaquer.Remove(persoAAttaquer);
+                            Console.WriteLine("Illusion " + persoAAttaquer.GetName() + " éliminée !");
+                        }
+                    }
+                }
+                else
+                {
+                    //pas touché
+
                 }
             }
             else
             {
-                //pas touché
-
+                Console.WriteLine("Il n'y a plus de persos à attaquer !");
             }
         }
 
@@ -413,6 +450,15 @@ namespace DM_JDR_Console.Characters
             }
 
             return result;
+        }
+
+        public virtual void OnAppelPowerIllusioniste(EventArgs e)
+        {
+            EventHandler handler = appelPowerIllusioniste;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
         }
     }
 }

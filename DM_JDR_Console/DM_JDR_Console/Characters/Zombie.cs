@@ -79,13 +79,13 @@ namespace DM_JDR_Console.Characters
             }
         }*/
 
-        public override void Power(List<Character> characters)
+        public override void Power(List<Character> characters, List<Character> charactersEaten)
         {
             Character characAManger;
             List<Character> characsSelection = new List<Character>();
             foreach (Character personnage in characters)
             {
-                if (personnage.GetIsEaten() == false && personnage.GetCurrentLife() == 0)
+                if (personnage.GetIsEaten() == false && personnage.GetCurrentLife() <= 0)
                 {
                     characsSelection.Add(personnage);
                 }
@@ -101,13 +101,16 @@ namespace DM_JDR_Console.Characters
                 characAManger = characsSelection[index];
                 Console.WriteLine(characsSelection[index]);
 
-                if (characAManger.GetIsEaten() == false && characAManger.GetCurrentLife() == 0)
+                if (characAManger.GetIsEaten() == false && characAManger.GetCurrentLife() <= 0)
                 {
                     lock (_lock)
                     {
                         characAManger.SetIsEaten(true);
+                        this.SetCurrentLife(this.GetCurrentLife() + characAManger.GetMaximumLife());
+                        charactersEaten.Add(characAManger);
+                        characters.Remove(characAManger);
+
                     }
-                    this.SetCurrentLife(this.GetCurrentLife() + characAManger.GetMaximumLife());
                     if (this.GetCurrentLife() > this.GetMaximumLife())
                     {
                         this.SetCurrentLife(this.GetMaximumLife());

@@ -80,7 +80,7 @@ namespace DM_JDR_Console.Characters
             }
         }*/
 
-        public override void Power(List<Character> characters)
+        public override void Power(List<Character> characters, List<Character> charactersEaten)
         {
             this.SetAttack(this.GetAttack() + (int)Math.Round(this.GetLostLifeInAHit() / 2f));
             this.SetDamages(this.GetDamages() + (int)Math.Round(this.GetLostLifeInAHit() / 2f));

@@ -8,6 +8,7 @@ namespace DM_JDR_Console.Characters
 {
     class Paladin : Character, ICharacter
     {
+        Object _lock = new Object();
         public Paladin(string name)
         {
             this.name = name;
@@ -100,7 +101,7 @@ namespace DM_JDR_Console.Characters
             }
         }
 
-        public override void Power(List<Character> characters)
+        public override void Power(List<Character> characters, List<Character> charactersEaten)
         {
             this.SetAffectedByAttackDelay(true);
             if (this.GetIsHited() == true)
@@ -120,43 +121,59 @@ namespace DM_JDR_Console.Characters
             return base.RollDice();
         }
 
-        public override void AttackGenerale(List<Character> persosAAttaquer)
+        public override void AttackGenerale(List<Character> persosAAttaquer, List<Character> charactersEaten)
         {
-            int index = rand.Next(persosAAttaquer.Count);
-            while (index == persosAAttaquer.IndexOf(this))
+            if (persosAAttaquer.Count > 0)
             {
-                index = rand.Next(persosAAttaquer.Count);
-            }
-            Character persoAAttaquer = persosAAttaquer[index];
-            Console.WriteLine("Le perso attaqué est " + persoAAttaquer.GetName() + " !");
-            persoAAttaquer.SetIsHited(false);
-            persoAAttaquer.SetDelay(0);
-            int jetAttaque = this.GetAttack() + RollDice();
-            Console.WriteLine("Jet d'attaque : " + jetAttaque.ToString());
-            int jetDefense = persoAAttaquer.GetDefense() + RollDice();
-            Console.WriteLine("Jet de défense : " + jetDefense.ToString());
-            if (jetAttaque - jetDefense > 0)
-            {
-                //touché
-                persoAAttaquer.SetIsHited(true);
-                int damagesSubis = (jetAttaque - jetDefense) * this.GetDamages() / 100;
-                if (persoAAttaquer.GetIsUndead() == true)
+                int index = rand.Next(persosAAttaquer.Count);
+                while (index == persosAAttaquer.IndexOf(this) && persosAAttaquer.Count > 0)
                 {
-                    damagesSubis = damagesSubis * 2;
+                    index = rand.Next(persosAAttaquer.Count);
                 }
-                persoAAttaquer.TakeDamages(damagesSubis);
-                if (persoAAttaquer.GetAffectedByAttackDelay() == true)
+                Character persoAAttaquer = persosAAttaquer[index];
+                Console.WriteLine("Le perso attaqué est " + persoAAttaquer.GetName() + " !");
+                persoAAttaquer.SetIsHited(false);
+                persoAAttaquer.SetDelay(0);
+                int jetAttaque = this.GetAttack() + RollDice();
+                Console.WriteLine("Jet d'attaque : " + jetAttaque.ToString());
+                int jetDefense = persoAAttaquer.GetDefense() + RollDice();
+                Console.WriteLine("Jet de défense : " + jetDefense.ToString());
+                if (jetAttaque - jetDefense > 0)
                 {
-                    if (persoAAttaquer.GetCurrentLife() > 0)
+                    //touché
+                    persoAAttaquer.SetIsHited(true);
+                    int damagesSubis = (jetAttaque - jetDefense) * this.GetDamages() / 100;
+                    if (persoAAttaquer.GetIsUndead() == true)
+                    {
+                        damagesSubis = damagesSubis * 2;
+                    }
+                    persoAAttaquer.TakeDamages(damagesSubis);
+                    if (persoAAttaquer is IllusionOf)
+                    {
+                        lock (_lock)
+                        {
+                            OnAppelPowerIllusioniste(EventArgs.Empty);
+                            persoAAttaquer.GetIllusionisteParent().SetNbIllusionOf(persoAAttaquer.GetIllusionisteParent().GetNbIllusionOf() - 1);
+                            persoAAttaquer.GetIllusionisteParent().Passive();
+                            charactersEaten.Add(persoAAttaquer);
+                            persosAAttaquer.Remove(persoAAttaquer);
+                            Console.WriteLine("Illusion " + persoAAttaquer.GetName() + " éliminée !");
+                        }
+                    }
+                    if (persoAAttaquer.GetAffectedByAttackDelay() == true && persoAAttaquer.GetCurrentLife() > 0)
                     {
                         persoAAttaquer.SetDelay(damagesSubis);
                     }
                 }
+                else
+                {
+                    //pas touché
+
+                }
             }
             else
             {
-                //pas touché
-
+                Console.WriteLine("Il n'y a plus de persos à attaquer !");
             }
         }
     }
