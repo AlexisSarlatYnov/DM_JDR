@@ -28,6 +28,7 @@ namespace DM_JDR_Console
             //TestIllusioniste();
             //TestAlchimiste();
             //TestAssassin();
+            TestNecromancien();
         }
 
         public static void TestBerserker()
@@ -406,12 +407,12 @@ namespace DM_JDR_Console
         public static void TestAssassin()
         {
             Assassin assassin = new Assassin("A");
-            Character character1 = new Character("C1");
+            //Character character1 = new Character("C1");
             Character character2 = new Character("C2");
             Alchimiste alchimiste = new Alchimiste("B");
             Zombie zombie = new Zombie("Z");
             characters.Add(assassin);
-            characters.Add(character1);
+            //characters.Add(character1);
             characters.Add(character2);
             characters.Add(alchimiste);
             characters.Add(zombie);
@@ -454,6 +455,51 @@ namespace DM_JDR_Console
             assassin.AttackGenerale(characters, charactersEaten);
             Console.ReadLine();
         }
+
+        public static void TestNecromancien()
+        {
+            Necromancien necromancien = new Necromancien("A");
+            Console.WriteLine(necromancien.GetName() + " a une attack de " + necromancien.GetAttack() + " !");
+            necromancien.appelPowerNecro += n_NecroPassive;
+            Character character1 = new Character("C1");
+            Character character2 = new Character("C2");
+            Character character3 = new Character("C3");
+            Character character4 = new Character("C4");
+            Character character5 = new Character("C5");
+            characters.Add(necromancien);
+            characters.Add(character1);
+            characters.Add(character2);
+            characters.Add(character3);
+            characters.Add(character4);
+            characters.Add(character5);
+            Console.WriteLine(necromancien.GetName() + " utilise son pouvoir !");
+            necromancien.Power(characters, charactersEaten);
+            while (character2.GetCurrentLife() > 0)
+            {
+                Console.WriteLine(character1.GetName() + " va attaquer !");
+                character1.AttackGenerale(characters, charactersEaten);
+                Console.WriteLine("Attack de " + necromancien.GetName() + " est de " + necromancien.GetAttack() + " !");
+            }
+            Console.WriteLine(necromancien.GetName() + " va attaquer !");
+            necromancien.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine("Attack de " + necromancien.GetName() + " est de " + necromancien.GetAttack() + " !");
+            Console.WriteLine(necromancien.GetName() + " va attaquer !");
+            necromancien.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine("Attack de " + necromancien.GetName() + " est de " + necromancien.GetAttack() + " !");
+            Console.WriteLine(necromancien.GetName() + " va attaquer !");
+            necromancien.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine("Attack de " + necromancien.GetName() + " est de " + necromancien.GetAttack() + " !");
+            Console.WriteLine(necromancien.GetName() + " va attaquer !");
+            necromancien.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine("Attack de " + necromancien.GetName() + " est de " + necromancien.GetAttack() + " !");
+            Console.ReadLine();
+        }
+        static void n_NecroPassive(object sender, EventArgs e)
+        {
+            Console.WriteLine("All necromancians use their passive !");
+        }
+
+
 
 
 

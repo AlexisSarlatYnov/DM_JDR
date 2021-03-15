@@ -52,6 +52,7 @@
     <Compile Include="Characters\Illusioniste.cs" />
     <Compile Include="Characters\IllusionOf.cs" />
     <Compile Include="Characters\Magicien.cs" />
+    <Compile Include="Characters\Necromancien.cs" />
     <Compile Include="Characters\Paladin.cs" />
     <Compile Include="Characters\Pretre.cs" />
     <Compile Include="Characters\Robot.cs" />

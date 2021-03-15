@@ -30,6 +30,7 @@ namespace DM_JDR_Console.Characters
         public event EventHandler appelPowerIllusioniste;
         public Character illusionisteParent;
         public int nbIllusionOf = 0;
+        public event EventHandler appelPowerNecro;
 
         public Character()
         {
@@ -406,6 +407,18 @@ namespace DM_JDR_Console.Characters
                     persoAAttaquer.SetIsHited(true);
                     int damagesSubis = (jetAttaque - jetDefense) * this.GetDamages() / 100;
                     persoAAttaquer.TakeDamages(damagesSubis);
+                    if(persoAAttaquer.GetCurrentLife() <= 0)
+                    {
+                        Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
+                        OnAppelPowerNecro(EventArgs.Empty);
+                        for (int i = 0; i < persosAAttaquer.Count; i++)
+                        {
+                            if(persosAAttaquer[i] is Necromancien)
+                            {
+                                persosAAttaquer[i].Passive();
+                            }
+                        }
+                    }
                     if (persoAAttaquer.GetAffectedByAttackDelay() == true && persoAAttaquer.GetCurrentLife() > 0)
                     {
                         persoAAttaquer.SetDelay(damagesSubis);
@@ -455,6 +468,14 @@ namespace DM_JDR_Console.Characters
         public virtual void OnAppelPowerIllusioniste(EventArgs e)
         {
             EventHandler handler = appelPowerIllusioniste;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+        public virtual void OnAppelPowerNecro(EventArgs e)
+        {
+            EventHandler handler = appelPowerNecro;
             if (handler != null)
             {
                 handler(this, e);

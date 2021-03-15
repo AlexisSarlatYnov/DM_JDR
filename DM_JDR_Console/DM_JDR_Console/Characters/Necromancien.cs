@@ -6,19 +6,22 @@ using System.Threading.Tasks;
 
 namespace DM_JDR_Console.Characters
 {
-    class Assassin : Character, ICharacter
+    class Necromancien : Character, ICharacter
     {
         Object _lock = new Object();
-        public Assassin(string name)
+
+        public Necromancien(string name)
         {
             this.name = name;
-            this.attack = 150;
-            this.defense = 100;
+            this.attack = 0;
+            this.defense = 10;
             this.attackSpeed = 1.0f;
-            this.damages = 100;
-            this.maximumLife = 185;
-            this.currentLife = 185;
-            this.powerSpeed = 0.5f;
+            this.damages = 0;
+            this.maximumLife = 275;
+            this.currentLife = 275;
+            this.powerSpeed = 5.0f;
+            this.isUndead = true;
+            this.canBePoisoned = false;
             rand = new Random(NameToInt() + (int)DateTime.Now.Ticks);
         }
 
@@ -47,20 +50,28 @@ namespace DM_JDR_Console.Characters
                     //touché
                     persoAAttaquer.SetIsHited(true);
                     int damagesSubis = (jetAttaque - jetDefense) * this.GetDamages() / 100;
+                    persoAAttaquer.TakeDamages(damagesSubis);
                     if (persoAAttaquer.GetIsUndead() == false && persoAAttaquer.GetCanBePoisoned() == true)
                     {
-                        persoAAttaquer.SetStackPoison(persoAAttaquer.GetStackPoison() + (int)(damagesSubis * 0.1f));
+                        persoAAttaquer.SetStackPoison(persoAAttaquer.GetStackPoison() + (int)(damagesSubis * 0.5f));
                         Console.WriteLine("Stack de poison de " + persoAAttaquer.GetName() + "  est de " + persoAAttaquer.GetStackPoison() + " dégâts empoisonnés !");
                     }
                     else
                     {
                         Console.WriteLine(persoAAttaquer.GetName() + " ne peut pas être empoisonné !");
                     }
-                    if ((persoAAttaquer.GetCurrentLife() / 2) < damagesSubis) {
-                        persoAAttaquer.SetCurrentLife(0);
-                        Console.WriteLine(persoAAttaquer.GetName() + " a pris un coup critique de l'assassin " + this.GetName() + " !");
+                    if (persoAAttaquer.GetCurrentLife() <= 0)
+                    {
+                        Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
+                        OnAppelPowerNecro(EventArgs.Empty);
+                        for (int i = 0; i < persosAAttaquer.Count; i++)
+                        {
+                            if (persosAAttaquer[i] is Necromancien)
+                            {
+                                persosAAttaquer[i].Passive();
+                            }
+                        }
                     }
-                    persoAAttaquer.TakeDamages(damagesSubis);
                     if (persoAAttaquer.GetAffectedByAttackDelay() == true && persoAAttaquer.GetCurrentLife() > 0)
                     {
                         persoAAttaquer.SetDelay(damagesSubis);
@@ -92,20 +103,28 @@ namespace DM_JDR_Console.Characters
 
         public override void Passive()
         {
-            base.Passive();
+            this.SetAttack(this.GetAttack() + 5);
+            this.SetDefense(this.GetDefense() + 5);
+            this.SetDamages(this.GetDamages() + 5);
+            this.SetCurrentLife(this.GetCurrentLife() + 50);
+            this.SetMaximumLife(this.GetMaximumLife() + 50);
         }
 
         public override void Power(List<Character> characters, List<Character> charactersEaten)
         {
-            int cptVivants = 0;
+            int cptMorts = 0;
             for (int i = 0; i < characters.Count; i++)
             {
-                if (characters[i].GetCurrentLife() > 0)
+                if (characters[i].GetCurrentLife() <= 0)
                 {
-                    cptVivants++;
+                    cptMorts++;
                 }
             }
-            if(cptVivants >= 5)
+            if(charactersEaten.Count > 0)
+            {
+                cptMorts = cptMorts + charactersEaten.Count;
+            }
+            if (cptMorts == 0 && characters.Count >= 5)
             {
                 this.SetIsHidden(true);
                 Console.WriteLine(this.GetName() + " est camouflé !");
@@ -113,8 +132,20 @@ namespace DM_JDR_Console.Characters
             else
             {
                 this.SetIsHidden(false);
-                Console.WriteLine(this.GetName() + " ne peut se camoufler car pas assez de combattants !");
+                Console.WriteLine(this.GetName() + " ne peut pas être camouflé !");
             }
+        }
+
+        public override int RollDice()
+        {
+            return rand.Next(1, 151);
+        }
+
+        public override void TakeDamages(int damagesSubis)
+        {
+            damagesSubis = (int)(damagesSubis * 0.5f);
+            Console.WriteLine(this.GetName() + " subit " + damagesSubis.ToString() + " dégâts !");
+            this.SetCurrentLife(this.GetCurrentLife() - damagesSubis);
         }
     }
 }

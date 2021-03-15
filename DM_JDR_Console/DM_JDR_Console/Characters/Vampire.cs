@@ -175,6 +175,18 @@ namespace DM_JDR_Console.Characters
                     persoAAttaquer.TakeDamages(damagesSubis);
                     soins = SoinsVampiriques(damagesSubis);
                     this.Passive();
+                    if (persoAAttaquer.GetCurrentLife() <= 0)
+                    {
+                        Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
+                        OnAppelPowerNecro(EventArgs.Empty);
+                        for (int i = 0; i < persosAAttaquer.Count; i++)
+                        {
+                            if (persosAAttaquer[i] is Necromancien)
+                            {
+                                persosAAttaquer[i].Passive();
+                            }
+                        }
+                    }
                     if (persoAAttaquer is IllusionOf)
                     {
                         lock (_lock)

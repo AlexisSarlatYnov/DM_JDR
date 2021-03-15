@@ -139,6 +139,18 @@ namespace DM_JDR_Console.Characters
                                     persoAAttaquer.SetIsHited(true);
                                     damagesSubis = (jetAttaque - jetDefense) * damagesPower / 100;
                                     persoAAttaquer.TakeDamages(damagesSubis);
+                                    if (persoAAttaquer.GetCurrentLife() <= 0)
+                                    {
+                                        Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
+                                        OnAppelPowerNecro(EventArgs.Empty);
+                                        for (int i = 0; i < characters.Count; i++)
+                                        {
+                                            if (characters[i] is Necromancien)
+                                            {
+                                                characters[i].Passive();
+                                            }
+                                        }
+                                    }
                                     if (persoAAttaquer is IllusionOf)
                                     {
                                         lock (_lock)
