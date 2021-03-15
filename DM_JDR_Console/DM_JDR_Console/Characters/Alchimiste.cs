@@ -78,11 +78,11 @@ namespace DM_JDR_Console.Characters
                         {
                             Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
                             OnAppelPowerNecro(EventArgs.Empty);
-                            for (int i = 0; i < persosAAttaquer.Count; i++)
+                            for (int j = 0; j < persosAAttaquer.Count; j++)
                             {
-                                if (persosAAttaquer[i] is Necromancien)
+                                if (persosAAttaquer[j] is Necromancien)
                                 {
-                                    persosAAttaquer[i].Passive();
+                                    persosAAttaquer[j].Passive();
                                 }
                             }
                         }
