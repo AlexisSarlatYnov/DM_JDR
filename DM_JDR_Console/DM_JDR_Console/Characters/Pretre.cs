@@ -62,7 +62,7 @@ namespace DM_JDR_Console.Characters
             if (persosAAttaquer.Count > 0)
             {
                 int index = rand.Next(persosAAttaquer.Count);
-                while (index == persosAAttaquer.IndexOf(this) && persosAAttaquer.Count > 0 && persosAAttaquer[index].GetIsHidden() == true)
+                while (index == persosAAttaquer.IndexOf(this) && persosAAttaquer.Count > 0 || persosAAttaquer[index].GetCurrentLife() <= 0 && persosAAttaquer.Count > 0 || persosAAttaquer[index].GetIsHidden() == true && persosAAttaquer.Count > 0)
                 {
                     index = rand.Next(persosAAttaquer.Count);
                 }

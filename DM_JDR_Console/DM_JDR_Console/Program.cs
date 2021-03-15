@@ -26,7 +26,8 @@ namespace DM_JDR_Console
             //TestPretre();
             //TestMagicien();
             //TestIllusioniste();
-            TestAlchimiste();
+            //TestAlchimiste();
+            //TestAssassin();
         }
 
         public static void TestBerserker()
@@ -402,7 +403,57 @@ namespace DM_JDR_Console
             Console.ReadLine();
         }
 
-
+        public static void TestAssassin()
+        {
+            Assassin assassin = new Assassin("A");
+            Character character1 = new Character("C1");
+            Character character2 = new Character("C2");
+            Alchimiste alchimiste = new Alchimiste("B");
+            Zombie zombie = new Zombie("Z");
+            characters.Add(assassin);
+            characters.Add(character1);
+            characters.Add(character2);
+            characters.Add(alchimiste);
+            characters.Add(zombie);
+            assassin.Power(characters, charactersEaten);
+            Console.WriteLine(zombie.GetName() + " attaque !");
+            zombie.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(zombie.GetName() + " attaque !");
+            zombie.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(zombie.GetName() + " attaque !");
+            zombie.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(zombie.GetName() + " attaque !");
+            zombie.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(zombie.GetName() + " attaque !");
+            zombie.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(zombie.GetName() + " attaque !");
+            zombie.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(alchimiste.GetName() + " attaque !");
+            alchimiste.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(alchimiste.GetName() + " attaque !");
+            alchimiste.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(alchimiste.GetName() + " attaque !");
+            alchimiste.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(alchimiste.GetName() + " attaque !");
+            alchimiste.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(assassin.GetName() + " attaque !");
+            assassin.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(assassin.GetName() + " attaque !");
+            assassin.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(assassin.GetName() + " attaque !");
+            assassin.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(assassin.GetName() + " attaque !");
+            assassin.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(assassin.GetName() + " attaque !");
+            assassin.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(assassin.GetName() + " attaque !");
+            assassin.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(assassin.GetName() + " attaque !");
+            assassin.AttackGenerale(characters, charactersEaten);
+            Console.WriteLine(assassin.GetName() + " attaque !");
+            assassin.AttackGenerale(characters, charactersEaten);
+            Console.ReadLine();
+        }
 
 
 

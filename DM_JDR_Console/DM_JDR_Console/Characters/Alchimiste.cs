@@ -30,7 +30,7 @@ namespace DM_JDR_Console.Characters
                 List<Character> listCibles = new List<Character>();
                 for (int i = 0; i < persosAAttaquer.Count; i++)
                 {
-                    if(EstCible() == true && persosAAttaquer[i] != this)
+                    if(EstCible() == true && persosAAttaquer[i] != this && persosAAttaquer[i].GetCurrentLife() > 0)
                     {
                         listCibles.Add(persosAAttaquer[i]);
                     }
@@ -50,6 +50,11 @@ namespace DM_JDR_Console.Characters
                     {
                         //touché
                         persoAAttaquer.SetIsHited(true);
+                        if(persoAAttaquer.GetIsHidden() == true)
+                        {
+                            persoAAttaquer.SetIsHidden(false);
+                            Console.WriteLine(persoAAttaquer.GetName() + " n'est plus camouflé !");
+                        }                        
                         int damagesSubis = (int)((jetAttaque - jetDefense) * this.GetDamages() / 100 * 0.5f);
                         if(persoAAttaquer.GetIsUndead() == true)
                         {

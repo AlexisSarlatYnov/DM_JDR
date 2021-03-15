@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Characters\Alchimiste.cs" />
+    <Compile Include="Characters\Assassin.cs" />
     <Compile Include="Characters\Berserker.cs" />
     <Compile Include="Characters\Character.cs" />
     <Compile Include="Characters\Guerrier.cs" />

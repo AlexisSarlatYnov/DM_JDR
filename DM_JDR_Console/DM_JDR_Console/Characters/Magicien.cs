@@ -39,7 +39,7 @@ namespace DM_JDR_Console.Characters
             if (characters.Count > 0)
             {
                 int index = rand.Next(characters.Count);
-                while (index == characters.IndexOf(this) && characters.Count > 0)
+                while (index == characters.IndexOf(this) && characters.Count > 0 || characters[index].GetCurrentLife() <= 0 && characters.Count > 0)
                 {
                     index = rand.Next(characters.Count);
                 }
@@ -55,6 +55,11 @@ namespace DM_JDR_Console.Characters
                 {
                     //touché
                     persoAAttaquer.SetIsHited(true);
+                    if (persoAAttaquer.GetIsHidden() == true)
+                    {
+                        persoAAttaquer.SetIsHidden(false);
+                        Console.WriteLine(persoAAttaquer.GetName() + " n'est plus camouflé !");
+                    }
                     int damagesSubis = (jetAttaque - jetDefense) * damagesPower / 100;
                     persoAAttaquer.TakeDamages(damagesSubis);
                     if (persoAAttaquer is IllusionOf)
@@ -99,7 +104,7 @@ namespace DM_JDR_Console.Characters
                         if (attackContinue == true)
                         {
                             index = rand.Next(characters.Count);
-                            while (index == characters.IndexOf(this) && characters.Count > 0 && tousMort == false || characters[index].GetCurrentLife() <= 0 && tousMort == false)
+                            while (index == characters.IndexOf(this) && characters.Count > 0 && tousMort == false || characters[index].GetCurrentLife() <= 0 && characters.Count > 0 && tousMort == false)
                             {
                                 Console.WriteLine("Nombre de morts est de : " + cptMorts.ToString() + " morts !");
                                 if (cptMorts == (characters.Count - 1))
@@ -126,6 +131,11 @@ namespace DM_JDR_Console.Characters
                                 if (jetAttaque - jetDefense > 0)
                                 {
                                     //touché
+                                    if (persoAAttaquer.GetIsHidden() == true)
+                                    {
+                                        persoAAttaquer.SetIsHidden(false);
+                                        Console.WriteLine(persoAAttaquer.GetName() + " n'est plus camouflé !");
+                                    }
                                     persoAAttaquer.SetIsHited(true);
                                     damagesSubis = (jetAttaque - jetDefense) * damagesPower / 100;
                                     persoAAttaquer.TakeDamages(damagesSubis);
