@@ -123,8 +123,10 @@ namespace DM_JDR_Console
                 {
                     if (character.GetCurrentLife() > 0)
                     {
+                        character.Score(StartNumberFighter - 1);
                         MyLog(character.GetName() + " remporte le battle royale");
                     }
+                    Console.WriteLine("Score de " + character.GetName() + " est de : " + character.GetScoring().ToString() + " !");
                 }                
                 MyLog("---------- Fin du combat ----------");
                 estFini = true;

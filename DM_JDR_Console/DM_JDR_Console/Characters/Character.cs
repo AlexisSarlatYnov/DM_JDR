@@ -33,6 +33,8 @@ namespace DM_JDR_Console.Characters
         public int nbIllusionOf = 0;
         public event EventHandler appelPowerNecro;
         public FightManager fightManager;
+        public int scoring = 0;
+        public int nbMorts = 0;
 
         public Character()
         {
@@ -77,6 +79,7 @@ namespace DM_JDR_Console.Characters
             rand = new Random(NameToInt() + (int)DateTime.Now.Ticks);
             this.illusionisteParent = null;
             this.nbIllusionOf = 0;
+            this.scoring = 0;
 
             this.Reset();
         }
@@ -308,6 +311,16 @@ namespace DM_JDR_Console.Characters
             this.nbIllusionOf = pNbIllusionOf;
         }
 
+        public int GetScoring()
+        {
+            return this.scoring;
+        }
+
+        public void SetScoring(int pScoring)
+        {
+            this.scoring = pScoring;
+        }
+
 
         public virtual void Power(List<Character> characters, List<Character> charactersEaten)
         {
@@ -324,6 +337,11 @@ namespace DM_JDR_Console.Characters
             return rand.Next(1, 101);
         }
 
+        public void Score(int nbMorts)
+        {
+            this.SetScoring(nbMorts);
+            Console.WriteLine("Score de " + this.GetName() + " est de " + this.GetScoring().ToString() + " !");
+        }
         
 
 
@@ -415,7 +433,16 @@ namespace DM_JDR_Console.Characters
                         persoAAttaquer.TakeDamages(damagesSubis);
                         if (persoAAttaquer.GetCurrentLife() <= 0)
                         {
-                            Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
+                            if(persoAAttaquer is IllusionOf) {
+                                Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
+                            }
+                            else
+                            {
+                                Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
+                                nbMorts++;
+                                persoAAttaquer.Score(nbMorts);
+                            }
+                            
                             OnAppelPowerNecro(EventArgs.Empty);
                             for (int i = 0; i < persosAAttaquer.Count; i++)
                             {

@@ -68,6 +68,27 @@ namespace DM_JDR_Console.Characters
                             Console.WriteLine(persoAAttaquer.GetName() + " a pris un coup critique de l'assassin " + this.GetName() + " !");
                         }
                         persoAAttaquer.TakeDamages(damagesSubis);
+                        if (persoAAttaquer.GetCurrentLife() <= 0)
+                        {
+                            if (persoAAttaquer is IllusionOf)
+                            {
+                                Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
+                            }
+                            else
+                            {
+                                Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
+                                nbMorts++;
+                                persoAAttaquer.Score(nbMorts);
+                            }
+                            OnAppelPowerNecro(EventArgs.Empty);
+                            for (int j = 0; j < persosAAttaquer.Count; j++)
+                            {
+                                if (persosAAttaquer[j] is Necromancien)
+                                {
+                                    persosAAttaquer[j].Passive();
+                                }
+                            }
+                        }
                         if (persoAAttaquer.GetAffectedByAttackDelay() == true && persoAAttaquer.GetCurrentLife() > 0)
                         {
                             persoAAttaquer.SetDelay(damagesSubis);

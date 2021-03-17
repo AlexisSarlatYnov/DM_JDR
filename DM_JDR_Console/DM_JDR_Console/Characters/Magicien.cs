@@ -69,6 +69,27 @@ namespace DM_JDR_Console.Characters
                             }
                             int damagesSubis = (jetAttaque - jetDefense) * damagesPower / 100;
                             persoAAttaquer.TakeDamages(damagesSubis);
+                            if (persoAAttaquer.GetCurrentLife() <= 0)
+                            {
+                                if (persoAAttaquer is IllusionOf)
+                                {
+                                    Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
+                                }
+                                else
+                                {
+                                    Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
+                                    nbMorts++;
+                                    persoAAttaquer.Score(nbMorts);
+                                }
+                                OnAppelPowerNecro(EventArgs.Empty);
+                                for (int j = 0; j < characters.Count; j++)
+                                {
+                                    if (characters[j] is Necromancien)
+                                    {
+                                        characters[j].Passive();
+                                    }
+                                }
+                            }
                             if (persoAAttaquer is IllusionOf)
                             {
                                 lock (_lock2)
@@ -84,11 +105,7 @@ namespace DM_JDR_Console.Characters
                             if (persoAAttaquer.GetAffectedByAttackDelay() == true && persoAAttaquer.GetCurrentLife() > 0)
                             {
                                 persoAAttaquer.SetDelay(damagesSubis);
-                            }
-                            else
-                            {
-                                Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
-                            }
+                            }                            
                             bool attackContinue = true;
                             int currentDamagesPower = damagesPower;
                             bool tousMort = false;
@@ -150,7 +167,16 @@ namespace DM_JDR_Console.Characters
                                             persoAAttaquer.TakeDamages(damagesSubis);
                                             if (persoAAttaquer.GetCurrentLife() <= 0)
                                             {
-                                                Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
+                                                if (persoAAttaquer is IllusionOf)
+                                                {
+                                                    Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
+                                                }
+                                                else
+                                                {
+                                                    Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
+                                                    nbMorts++;
+                                                    persoAAttaquer.Score(nbMorts);
+                                                }
                                                 OnAppelPowerNecro(EventArgs.Empty);
                                                 for (int i = 0; i < characters.Count; i++)
                                                 {
@@ -175,12 +201,7 @@ namespace DM_JDR_Console.Characters
                                             if (persoAAttaquer.GetAffectedByAttackDelay() == true && persoAAttaquer.GetCurrentLife() > 0)
                                             {
                                                 persoAAttaquer.SetDelay(damagesSubis);
-                                            }
-                                            else
-                                            {
-                                                Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
-                                                cptMorts++;
-                                            }
+                                            }                                            
                                         }
                                         else
                                         {
