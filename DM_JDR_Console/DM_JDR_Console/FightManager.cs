@@ -13,7 +13,7 @@ namespace DM_JDR_Console
     {
         public List<Character> charactersList = new List<Character>();
         public List<Character> charactersEaten = new List<Character>();
-        public int round = 0;
+        public int round = 1;
         public DateTime startTime;
         public int StartNumberFighter = 0;
         public System.Timers.Timer timer1 = new System.Timers.Timer();
@@ -29,11 +29,20 @@ namespace DM_JDR_Console
             }
         }
 
-        public void StartCombat()
+        public async void StartCombat()
         {
+            estFini = false;
             startTime = DateTime.Now;
             round = 0;
             StartNumberFighter = charactersList.Count;
+
+            MyLog("----- Debut du combat -----");
+            MyLog("---------- Round " + round + " ----------");
+            //a commenter pour enchainer les rounds à la main
+            //faire des rounds tant qu'il y a plus d'un combattant vivant
+            timer1.Elapsed += new System.Timers.ElapsedEventHandler(poisonRoundEvent);
+            timer1.Interval = 5000;
+            timer1.Start();
             //Thread[] threads = new Thread[StartNumberFighter];
             //faire en sorte que les personnages ne soient pas blessé avant le début du combat
             for (int i = 0; i < charactersList.Count; i++)
@@ -43,18 +52,14 @@ namespace DM_JDR_Console
                 threads[i] = new Thread(() =>Figth(charactersList[i]));
                 threads[i].Start();*/
                 Console.WriteLine("A new challenger is coming : " + charactersList[i].GetName());
-                ThreadPool.QueueUserWorkItem(new WaitCallback(state => FigthAndPower(charactersList[i])));
+                //ThreadPool.QueueUserWorkItem(new WaitCallback(state => FigthAndPower(charactersList[i])));
+                await Task.Run(() => FigthAndPower(charactersList[i]));
                 //ThreadPool.QueueUserWorkItem(new WaitCallback(state => Figth(charactersList[i])));
                 /*Thread.Sleep(5);
                 ThreadPool.QueueUserWorkItem(new WaitCallback(state => FigthPower(charactersList[i])));*/
                 Thread.Sleep(5);                
             }
-            MyLog("----- Debut du combat -----");
-            //a commenter pour enchainer les rounds à la main
-            //faire des rounds tant qu'il y a plus d'un combattant vivant
-            timer1.Elapsed += new System.Timers.ElapsedEventHandler(poisonRoundEvent);
-            timer1.Interval = 5000;
-            timer1.Start();
+            
             while(estFini == false){}
             timer1.Stop();
         }
@@ -96,7 +101,8 @@ namespace DM_JDR_Console
         }
 
         public void poisonRoundEvent(object sender, System.Timers.ElapsedEventArgs e)
-        {            
+        {
+            MyLog("---------- Fin du round ----------");
             if (charactersList.Count > 1 && GetNbVivants() > 1)
             {
                 round++;
@@ -107,9 +113,9 @@ namespace DM_JDR_Console
                     if (charactersList[i].GetStackPoison() > 0)
                     {
                         charactersList[i].SetCurrentLife(charactersList[i].GetCurrentLife() - charactersList[i].GetStackPoison());
+                        Console.WriteLine(charactersList[i].GetName() + " a pris " + charactersList[i].GetStackPoison().ToString() + " dégâts de poison !");
                     }
                 }
-                MyLog("---------- Fin du round ----------");
             }
             else
             {
