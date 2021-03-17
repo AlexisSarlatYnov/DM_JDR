@@ -12,5 +12,6 @@ namespace DM_JDR_Console.Characters
         void Passive();
         int RollDice();
         void TakeDamages(int damagesSubis);
+        void Reset();
     }
 }

@@ -28,7 +28,8 @@ namespace DM_JDR_Console
             //TestIllusioniste();
             //TestAlchimiste();
             //TestAssassin();
-            TestNecromancien();
+            //TestNecromancien();
+            CombatV1();
         }
 
         public static void TestBerserker()
@@ -499,7 +500,25 @@ namespace DM_JDR_Console
             Console.WriteLine("All necromancians use their passive !");
         }
 
-
+        public static void CombatV1()
+        {
+            Alchimiste alchimiste = new Alchimiste("alchimiste");
+            Assassin assassin = new Assassin("assassin");
+            Berserker berserker = new Berserker("berserker");
+            Guerrier guerrier = new Guerrier("guerrier");
+            Illusioniste illusioniste = new Illusioniste("illusioniste");
+            Magicien magicien = new Magicien("magicien");
+            Necromancien necromancien = new Necromancien("necromancien");
+            Paladin paladin = new Paladin("paladin");
+            Pretre pretre = new Pretre("Pretre");
+            Robot robot = new Robot("robot");
+            Vampire vampire = new Vampire("vampire");
+            Zombie zombie = new Zombie("zombie");
+            List<Character> characters = new List<Character> { alchimiste, assassin, berserker, guerrier, illusioniste, magicien, necromancien, paladin, pretre, robot, vampire, zombie };
+            FightManager fightManager = new FightManager(characters, 0);
+            fightManager.StartCombat();
+            Console.ReadLine();
+        }
 
 
 

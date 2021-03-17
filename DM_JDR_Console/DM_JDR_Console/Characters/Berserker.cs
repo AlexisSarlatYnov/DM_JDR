@@ -12,6 +12,7 @@ namespace DM_JDR_Console.Characters
         public int lostLifeInAHit = 0;
         public int lostLifeTotal = 0;
         public float initialAttackSpeed = 1.1f;
+        Object _lock = new Object();
 
         public Berserker(string name)
         {
@@ -26,6 +27,9 @@ namespace DM_JDR_Console.Characters
             this.affectedByAttackDelay = false;
             this.lostLifeInAHit = 0;
             this.lostLifeTotal = 0;
+            rand = new Random(NameToInt() + (int)DateTime.Now.Ticks);
+
+            this.Reset();
         }
 
         public int GetLostLifeInAHit()
@@ -82,24 +86,30 @@ namespace DM_JDR_Console.Characters
 
         public override void Power(List<Character> characters, List<Character> charactersEaten)
         {
-            this.SetAttack(this.GetAttack() + (int)Math.Round(this.GetLostLifeInAHit() / 2f));
-            this.SetDamages(this.GetDamages() + (int)Math.Round(this.GetLostLifeInAHit() / 2f));
-            int dixPourcentMaxLife = (int)(this.GetMaximumLife() * 0.1f);
-            Console.WriteLine(dixPourcentMaxLife.ToString());
-            int bonusAttackSpeed = this.GetCurrentLife() / dixPourcentMaxLife;
-            int reste = this.GetCurrentLife() % dixPourcentMaxLife;
-            Console.WriteLine(bonusAttackSpeed.ToString());
-            this.SetAttackSpeed(initialAttackSpeed);
-            for (int i = 10; i > 0; i--)
+            lock (_lock)
             {
-                if (bonusAttackSpeed < i)
+                if (this.GetCurrentLife() > 0)
                 {
-                    this.SetAttackSpeed(this.GetAttackSpeed() + 0.3f);
+                    this.SetAttack(this.GetAttack() + (int)Math.Round(this.GetLostLifeInAHit() / 2f));
+                    this.SetDamages(this.GetDamages() + (int)Math.Round(this.GetLostLifeInAHit() / 2f));
+                    int dixPourcentMaxLife = (int)(this.GetMaximumLife() * 0.1f);
+                    Console.WriteLine(dixPourcentMaxLife.ToString());
+                    int bonusAttackSpeed = this.GetCurrentLife() / dixPourcentMaxLife;
+                    int reste = this.GetCurrentLife() % dixPourcentMaxLife;
+                    Console.WriteLine(bonusAttackSpeed.ToString());
+                    this.SetAttackSpeed(initialAttackSpeed);
+                    for (int i = 10; i > 0; i--)
+                    {
+                        if (bonusAttackSpeed < i)
+                        {
+                            this.SetAttackSpeed(this.GetAttackSpeed() + 0.3f);
+                        }
+                    }
+                    if (reste != 0)
+                    {
+                        this.SetAttackSpeed(this.GetAttackSpeed() - 0.3f);
+                    }
                 }
-            }
-            if (reste != 0)
-            {
-                this.SetAttackSpeed(this.GetAttackSpeed() - 0.3f);
             }
         }
 
@@ -120,6 +130,13 @@ namespace DM_JDR_Console.Characters
         public override void AttackGenerale(List<Character> persosAAttaquer, List<Character> charactersEaten)
         {
             base.AttackGenerale(persosAAttaquer, charactersEaten);
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            this.SetLostLifeInAHit(0);
+            this.SetLostLifeTotal(0);
         }
     }
 }

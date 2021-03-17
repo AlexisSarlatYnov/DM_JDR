@@ -8,6 +8,7 @@ namespace DM_JDR_Console.Characters
 {
     class Robot : Character, ICharacter
     {
+        Object _lock = new Object();
         public Robot(string name)
         {
             this.name = name;
@@ -20,6 +21,8 @@ namespace DM_JDR_Console.Characters
             this.powerSpeed = 0.5f;
             this.canBePoisoned = false;
             rand = new Random(NameToInt() + (int)DateTime.Now.Ticks);
+
+            this.Reset();
         }
 
         public override void AttackGenerale(List<Character> persosAAttaquer, List<Character> charactersEaten)
@@ -34,7 +37,19 @@ namespace DM_JDR_Console.Characters
 
         public override void Power(List<Character> characters, List<Character> charactersEaten)
         {
-            this.SetAttack((int)Math.Round(this.GetAttack() * 1.5f));
+            lock (_lock)
+            {
+                if (this.GetCurrentLife() > 0)
+                {
+                    this.SetAttack((int)Math.Round(this.GetAttack() * 1.5f));
+                }
+            }
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            this.SetAttack(25);
         }
 
         public override int RollDice()

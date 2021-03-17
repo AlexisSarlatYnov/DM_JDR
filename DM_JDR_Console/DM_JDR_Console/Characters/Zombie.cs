@@ -24,6 +24,8 @@ namespace DM_JDR_Console.Characters
             this.affectedByAttackDelay = false;
             this.canBePoisoned = false;
             rand = new Random(NameToInt() + (int)DateTime.Now.Ticks);
+
+            this.Reset();
         }
 
         /*public void ZombiePower(List<Character> characsAManger)
@@ -81,39 +83,45 @@ namespace DM_JDR_Console.Characters
 
         public override void Power(List<Character> characters, List<Character> charactersEaten)
         {
-            Character characAManger;
-            List<Character> characsSelection = new List<Character>();
-            foreach (Character personnage in characters)
+            lock (_lock)
             {
-                if (personnage.GetIsEaten() == false && personnage.GetCurrentLife() <= 0)
+                if (this.GetCurrentLife() > 0)
                 {
-                    characsSelection.Add(personnage);
-                }
-            }
-
-            if (characsSelection.Count == 0)
-            {
-                Console.WriteLine("Pas de personnage à manger !");
-            }
-            else
-            {
-                int index = rand.Next(characsSelection.Count);
-                characAManger = characsSelection[index];
-                Console.WriteLine(characsSelection[index]);
-
-                if (characAManger.GetIsEaten() == false && characAManger.GetCurrentLife() <= 0)
-                {
-                    lock (_lock)
+                    Character characAManger;
+                    List<Character> characsSelection = new List<Character>();
+                    foreach (Character personnage in characters)
                     {
-                        characAManger.SetIsEaten(true);
-                        this.SetCurrentLife(this.GetCurrentLife() + characAManger.GetMaximumLife());
-                        charactersEaten.Add(characAManger);
-                        characters.Remove(characAManger);
-
+                        if (personnage.GetIsEaten() == false && personnage.GetCurrentLife() <= 0)
+                        {
+                            characsSelection.Add(personnage);
+                        }
                     }
-                    if (this.GetCurrentLife() > this.GetMaximumLife())
+
+                    if (characsSelection.Count == 0)
                     {
-                        this.SetCurrentLife(this.GetMaximumLife());
+                        Console.WriteLine("Pas de personnage à manger !");
+                    }
+                    else
+                    {
+                        int index = rand.Next(characsSelection.Count);
+                        characAManger = characsSelection[index];
+                        Console.WriteLine(characsSelection[index]);
+
+                        if (characAManger.GetIsEaten() == false && characAManger.GetCurrentLife() <= 0)
+                        {
+                            lock (_lock)
+                            {
+                                characAManger.SetIsEaten(true);
+                                this.SetCurrentLife(this.GetCurrentLife() + characAManger.GetMaximumLife());
+                                charactersEaten.Add(characAManger);
+                                characters.Remove(characAManger);
+
+                            }
+                            if (this.GetCurrentLife() > this.GetMaximumLife())
+                            {
+                                this.SetCurrentLife(this.GetMaximumLife());
+                            }
+                        }
                     }
                 }
             }

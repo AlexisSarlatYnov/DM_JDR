@@ -8,6 +8,7 @@ namespace DM_JDR_Console.Characters
 {
     class Illusioniste : Character, ICharacter
     {
+        Object _lock = new Object();
         public Illusioniste(string name)
         {
             this.name = name;
@@ -19,6 +20,8 @@ namespace DM_JDR_Console.Characters
             this.currentLife = 100;
             this.powerSpeed = 0.5f;
             rand = new Random(NameToInt() + (int)DateTime.Now.Ticks);
+
+            this.Reset();
         }
 
         public override void AttackGenerale(List<Character> persosAAttaquer, List<Character> charactersEaten)
@@ -33,11 +36,17 @@ namespace DM_JDR_Console.Characters
 
         public override void Power(List<Character> characters, List<Character> charactersEaten)
         {
-            nbIllusionOf++;
-            this.Passive();
-            IllusionOf illusionOf = new IllusionOf(this, nbIllusionOf);
-            characters.Add(illusionOf);
-            Console.WriteLine("Illusion " + illusionOf.GetName() + " créée !");
+            lock (_lock)
+            {
+                if (this.GetCurrentLife() > 0)
+                {
+                    nbIllusionOf++;
+                    this.Passive();
+                    IllusionOf illusionOf = new IllusionOf(this, nbIllusionOf);
+                    characters.Add(illusionOf);
+                    Console.WriteLine("Illusion " + illusionOf.GetName() + " créée !");
+                }
+            }
         }
 
         

@@ -9,6 +9,7 @@ namespace DM_JDR_Console.Characters
     class Guerrier : Character, ICharacter
     {
         public event EventHandler<AppelPowerEventArgs> appelPower;
+        Object _lock = new Object();
         public Guerrier(string name)
         {
             this.name = name;
@@ -19,6 +20,9 @@ namespace DM_JDR_Console.Characters
             this.maximumLife = 250;
             this.currentLife = 250;
             this.powerSpeed = 0.2f;
+            rand = new Random(NameToInt() + (int)DateTime.Now.Ticks);
+
+            this.Reset();
         }
 
         /*public void GuerrierPower()
@@ -40,10 +44,16 @@ namespace DM_JDR_Console.Characters
 
         public override void Power(List<Character> characters, List<Character> charactersEaten)
         {
-            AppelPowerEventArgs args = new AppelPowerEventArgs();
-            args.bonusAttackSpeed = 0.5f;
-            args.guerrier = this;
-            OnAppelPower(args);
+            lock (_lock)
+            {
+                if (this.GetCurrentLife() > 0)
+                {
+                    AppelPowerEventArgs args = new AppelPowerEventArgs();
+                    args.bonusAttackSpeed = 0.5f;
+                    args.guerrier = this;
+                    OnAppelPower(args);
+                }
+            }
         }
 
         public override void Passive()

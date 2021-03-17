@@ -9,6 +9,7 @@ namespace DM_JDR_Console.Characters
     class Pretre : Character, ICharacter
     {
         Object _lock = new Object();
+        Object _lock2 = new Object();
         public Pretre(string name)
         {
             this.name = name;
@@ -21,6 +22,8 @@ namespace DM_JDR_Console.Characters
             this.powerSpeed = 1.0f;
             this.hitRadiantDamages = true;
             rand = new Random(NameToInt() + (int)DateTime.Now.Ticks);
+
+            this.Reset();
         }
 
         public override void Attack(Character persoAAttaquer)
@@ -58,77 +61,80 @@ namespace DM_JDR_Console.Characters
 
         public override void AttackGenerale(List<Character> persosAAttaquer, List<Character> charactersEaten)
         {
-            List<Character> UndeadList = UndeadPriority(persosAAttaquer);
-            if (persosAAttaquer.Count > 0)
+            lock (_lock)
             {
-                int index = rand.Next(persosAAttaquer.Count);
-                while (index == persosAAttaquer.IndexOf(this) && persosAAttaquer.Count > 0 || persosAAttaquer[index].GetCurrentLife() <= 0 && persosAAttaquer.Count > 0 || persosAAttaquer[index].GetIsHidden() == true && persosAAttaquer.Count > 0)
+                List<Character> UndeadList = UndeadPriority(persosAAttaquer);
+                if (persosAAttaquer.Count > 0)
                 {
-                    index = rand.Next(persosAAttaquer.Count);
-                }
-                Character persoAAttaquer = persosAAttaquer[index];
-                Console.WriteLine("Le perso initialement attaqué est " + persoAAttaquer.GetName() + " !");
-                if (UndeadList.Count != 0)
-                {
-                    Console.WriteLine("Il y a " + UndeadList.Count + " morts-vivants dans la liste de characters !");
-                    index = rand.Next(UndeadList.Count);
-                    persoAAttaquer = UndeadList[index];
-                    Console.WriteLine("Le mort-vivant attaqué par " + this.GetName() + " est " + persoAAttaquer.GetName() + " !");
-                }
-                else
-                {
-                    Console.WriteLine("Il y a " + UndeadList.Count + " morts-vivants dans la liste de characters !");
-                }
-                persoAAttaquer.SetIsHited(false);
-                persoAAttaquer.SetDelay(0);
-                int jetAttaque = this.GetAttack() + RollDice();
-                Console.WriteLine("Jet d'attaque : " + jetAttaque.ToString());
-                int jetDefense = persoAAttaquer.GetDefense() + RollDice();
-                Console.WriteLine("Jet de défense : " + jetDefense.ToString());
-                if (jetAttaque - jetDefense > 0)
-                {
-                    //touché
-                    persoAAttaquer.SetIsHited(true);
-                    int damagesSubis = (jetAttaque - jetDefense) * this.GetDamages() / 100;
-                    persoAAttaquer.TakeDamages(damagesSubis);
-                    if (persoAAttaquer.GetCurrentLife() <= 0)
+                    int index = rand.Next(persosAAttaquer.Count);
+                    while (index == persosAAttaquer.IndexOf(this) && persosAAttaquer.Count > 0 || persosAAttaquer[index].GetCurrentLife() <= 0 && persosAAttaquer.Count > 0 || persosAAttaquer[index].GetIsHidden() == true && persosAAttaquer.Count > 0)
                     {
-                        Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
-                        OnAppelPowerNecro(EventArgs.Empty);
-                        for (int i = 0; i < persosAAttaquer.Count; i++)
+                        index = rand.Next(persosAAttaquer.Count);
+                    }
+                    Character persoAAttaquer = persosAAttaquer[index];
+                    Console.WriteLine("Le perso initialement attaqué est " + persoAAttaquer.GetName() + " !");
+                    if (UndeadList.Count != 0)
+                    {
+                        Console.WriteLine("Il y a " + UndeadList.Count + " morts-vivants dans la liste de characters !");
+                        index = rand.Next(UndeadList.Count);
+                        persoAAttaquer = UndeadList[index];
+                        Console.WriteLine("Le mort-vivant attaqué par " + this.GetName() + " est " + persoAAttaquer.GetName() + " !");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Il y a " + UndeadList.Count + " morts-vivants dans la liste de characters !");
+                    }
+                    persoAAttaquer.SetIsHited(false);
+                    persoAAttaquer.SetDelay(0);
+                    int jetAttaque = this.GetAttack() + RollDice();
+                    Console.WriteLine("Jet d'attaque : " + jetAttaque.ToString());
+                    int jetDefense = persoAAttaquer.GetDefense() + RollDice();
+                    Console.WriteLine("Jet de défense : " + jetDefense.ToString());
+                    if (jetAttaque - jetDefense > 0)
+                    {
+                        //touché
+                        persoAAttaquer.SetIsHited(true);
+                        int damagesSubis = (jetAttaque - jetDefense) * this.GetDamages() / 100;
+                        persoAAttaquer.TakeDamages(damagesSubis);
+                        if (persoAAttaquer.GetCurrentLife() <= 0)
                         {
-                            if (persosAAttaquer[i] is Necromancien)
+                            Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
+                            OnAppelPowerNecro(EventArgs.Empty);
+                            for (int i = 0; i < persosAAttaquer.Count; i++)
                             {
-                                persosAAttaquer[i].Passive();
+                                if (persosAAttaquer[i] is Necromancien)
+                                {
+                                    persosAAttaquer[i].Passive();
+                                }
                             }
                         }
-                    }
-                    if (persoAAttaquer is IllusionOf)
-                    {
-                        lock (_lock)
+                        if (persoAAttaquer is IllusionOf)
                         {
-                            OnAppelPowerIllusioniste(EventArgs.Empty);
-                            persoAAttaquer.GetIllusionisteParent().SetNbIllusionOf(persoAAttaquer.GetIllusionisteParent().GetNbIllusionOf() - 1);
-                            persoAAttaquer.GetIllusionisteParent().Passive();
-                            charactersEaten.Add(persoAAttaquer);
-                            persosAAttaquer.Remove(persoAAttaquer);
-                            Console.WriteLine("Illusion " + persoAAttaquer.GetName() + " éliminée !");
+                            lock (_lock2)
+                            {
+                                OnAppelPowerIllusioniste(EventArgs.Empty);
+                                persoAAttaquer.GetIllusionisteParent().SetNbIllusionOf(persoAAttaquer.GetIllusionisteParent().GetNbIllusionOf() - 1);
+                                persoAAttaquer.GetIllusionisteParent().Passive();
+                                charactersEaten.Add(persoAAttaquer);
+                                persosAAttaquer.Remove(persoAAttaquer);
+                                Console.WriteLine("Illusion " + persoAAttaquer.GetName() + " éliminée !");
+                            }
+                        }
+                        if (persoAAttaquer.GetAffectedByAttackDelay() == true && persoAAttaquer.GetCurrentLife() > 0)
+                        {
+                            persoAAttaquer.SetDelay(damagesSubis);
                         }
                     }
-                    if (persoAAttaquer.GetAffectedByAttackDelay() == true && persoAAttaquer.GetCurrentLife() > 0)
+                    else
                     {
-                        persoAAttaquer.SetDelay(damagesSubis);
+                        //pas touché
+                        Console.WriteLine(persoAAttaquer.GetName() + " se défend !");
                     }
                 }
                 else
                 {
-                    //pas touché
-                    Console.WriteLine(persoAAttaquer.GetName() + " se défend !");
+                    Console.WriteLine("Il n'y a plus de persos à attaquer !");
                 }
-            }
-            else
-            {
-                Console.WriteLine("Il n'y a plus de persos à attaquer !");
             }
         }
 
@@ -169,10 +175,16 @@ namespace DM_JDR_Console.Characters
 
         public override void Power(List<Character> characters, List<Character> charactersEaten)
         {
-            this.SetCurrentLife(this.GetCurrentLife() + (int)(this.GetMaximumLife() * 0.1f));
-            if (this.GetCurrentLife() > this.GetMaximumLife())
+            lock (_lock)
             {
-                this.SetCurrentLife(this.GetMaximumLife());
+                if (this.GetCurrentLife() > 0)
+                {
+                    this.SetCurrentLife(this.GetCurrentLife() + (int)(this.GetMaximumLife() * 0.1f));
+                    if (this.GetCurrentLife() > this.GetMaximumLife())
+                    {
+                        this.SetCurrentLife(this.GetMaximumLife());
+                    }
+                }
             }
         }
 

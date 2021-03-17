@@ -9,6 +9,7 @@ namespace DM_JDR_Console.Characters
     class Alchimiste : Character, ICharacter
     {
         Object _lock = new Object();
+        Object _lock2 = new Object();
         public Alchimiste(string name)
         {
             this.name = name;
@@ -21,98 +22,103 @@ namespace DM_JDR_Console.Characters
             this.powerSpeed = 0.1f;
             this.hitRadiantDamages = true;
             rand = new Random(NameToInt() + (int)DateTime.Now.Ticks);
+
+            this.Reset();
         }
 
         public override void AttackGenerale(List<Character> persosAAttaquer, List<Character> charactersEaten)
         {
-            if (persosAAttaquer.Count > 0)
+            lock (_lock)
             {
-                List<Character> listCibles = new List<Character>();
-                for (int i = 0; i < persosAAttaquer.Count; i++)
+                if (persosAAttaquer.Count > 0)
                 {
-                    if(EstCible() == true && persosAAttaquer[i] != this && persosAAttaquer[i].GetCurrentLife() > 0)
+                    List<Character> listCibles = new List<Character>();
+                    for (int i = 0; i < persosAAttaquer.Count; i++)
                     {
-                        listCibles.Add(persosAAttaquer[i]);
-                    }
-                }
-
-                for (int i = 0; i < listCibles.Count; i++)
-                {
-                    Character persoAAttaquer = listCibles[i];
-                    Console.WriteLine("Le perso ciblé attaqué est " + persoAAttaquer.GetName() + " !");
-                    persoAAttaquer.SetIsHited(false);
-                    persoAAttaquer.SetDelay(0);
-                    int jetAttaque = this.GetAttack() + RollDice();
-                    Console.WriteLine("Jet d'attaque : " + jetAttaque.ToString());
-                    int jetDefense = persoAAttaquer.GetDefense() + RollDice();
-                    Console.WriteLine("Jet de défense : " + jetDefense.ToString());
-                    if (jetAttaque - jetDefense > 0)
-                    {
-                        //touché
-                        persoAAttaquer.SetIsHited(true);
-                        if(persoAAttaquer.GetIsHidden() == true)
+                        if (EstCible() == true && persosAAttaquer[i] != this && persosAAttaquer[i].GetCurrentLife() > 0)
                         {
-                            persoAAttaquer.SetIsHidden(false);
-                            Console.WriteLine(persoAAttaquer.GetName() + " n'est plus camouflé !");
-                        }                        
-                        int damagesSubis = (int)((jetAttaque - jetDefense) * this.GetDamages() / 100 * 0.5f);
-                        if(persoAAttaquer.GetIsUndead() == true)
-                        {
-                            damagesSubis = damagesSubis * 2;
+                            listCibles.Add(persosAAttaquer[i]);
                         }
-                        else
-                        {
-                            if (persoAAttaquer.GetCanBePoisoned() == true)
-                            {
-                                persoAAttaquer.SetStackPoison(persoAAttaquer.GetStackPoison() + damagesSubis);
-                                Console.WriteLine("Stack de poison de " + persoAAttaquer.GetName() + "  est de " + persoAAttaquer.GetStackPoison() + " dégâts empoisonnés !");
+                    }
 
+                    for (int i = 0; i < listCibles.Count; i++)
+                    {
+                        Character persoAAttaquer = listCibles[i];
+                        Console.WriteLine("Le perso ciblé attaqué est " + persoAAttaquer.GetName() + " !");
+                        persoAAttaquer.SetIsHited(false);
+                        persoAAttaquer.SetDelay(0);
+                        int jetAttaque = this.GetAttack() + RollDice();
+                        Console.WriteLine("Jet d'attaque : " + jetAttaque.ToString());
+                        int jetDefense = persoAAttaquer.GetDefense() + RollDice();
+                        Console.WriteLine("Jet de défense : " + jetDefense.ToString());
+                        if (jetAttaque - jetDefense > 0)
+                        {
+                            //touché
+                            persoAAttaquer.SetIsHited(true);
+                            if (persoAAttaquer.GetIsHidden() == true)
+                            {
+                                persoAAttaquer.SetIsHidden(false);
+                                Console.WriteLine(persoAAttaquer.GetName() + " n'est plus camouflé !");
+                            }
+                            int damagesSubis = (int)((jetAttaque - jetDefense) * this.GetDamages() / 100 * 0.5f);
+                            if (persoAAttaquer.GetIsUndead() == true)
+                            {
+                                damagesSubis = damagesSubis * 2;
                             }
                             else
                             {
-                                Console.WriteLine(persoAAttaquer.GetName() + " ne peut pas être empoisonné !");
-                            }
-                        }
-                        persoAAttaquer.TakeDamages(damagesSubis);
-                        if (persoAAttaquer.GetCurrentLife() <= 0)
-                        {
-                            Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
-                            OnAppelPowerNecro(EventArgs.Empty);
-                            for (int j = 0; j < persosAAttaquer.Count; j++)
-                            {
-                                if (persosAAttaquer[j] is Necromancien)
+                                if (persoAAttaquer.GetCanBePoisoned() == true)
                                 {
-                                    persosAAttaquer[j].Passive();
+                                    persoAAttaquer.SetStackPoison(persoAAttaquer.GetStackPoison() + damagesSubis);
+                                    Console.WriteLine("Stack de poison de " + persoAAttaquer.GetName() + "  est de " + persoAAttaquer.GetStackPoison() + " dégâts empoisonnés !");
+
+                                }
+                                else
+                                {
+                                    Console.WriteLine(persoAAttaquer.GetName() + " ne peut pas être empoisonné !");
+                                }
+                            }
+                            persoAAttaquer.TakeDamages(damagesSubis);
+                            if (persoAAttaquer.GetCurrentLife() <= 0)
+                            {
+                                Console.WriteLine(persoAAttaquer.GetName() + " est mort !");
+                                OnAppelPowerNecro(EventArgs.Empty);
+                                for (int j = 0; j < persosAAttaquer.Count; j++)
+                                {
+                                    if (persosAAttaquer[j] is Necromancien)
+                                    {
+                                        persosAAttaquer[j].Passive();
+                                    }
+                                }
+                            }
+                            if (persoAAttaquer.GetAffectedByAttackDelay() == true && persoAAttaquer.GetCurrentLife() > 0)
+                            {
+                                persoAAttaquer.SetDelay(damagesSubis);
+                            }
+                            if (persoAAttaquer is IllusionOf)
+                            {
+                                lock (_lock2)
+                                {
+                                    OnAppelPowerIllusioniste(EventArgs.Empty);
+                                    persoAAttaquer.GetIllusionisteParent().SetNbIllusionOf(persoAAttaquer.GetIllusionisteParent().GetNbIllusionOf() - 1);
+                                    persoAAttaquer.GetIllusionisteParent().Passive();
+                                    charactersEaten.Add(persoAAttaquer);
+                                    persosAAttaquer.Remove(persoAAttaquer);
+                                    Console.WriteLine("Illusion " + persoAAttaquer.GetName() + " éliminée !");
                                 }
                             }
                         }
-                        if (persoAAttaquer.GetAffectedByAttackDelay() == true && persoAAttaquer.GetCurrentLife() > 0)
+                        else
                         {
-                            persoAAttaquer.SetDelay(damagesSubis);
+                            //pas touché
+                            Console.WriteLine(persoAAttaquer.GetName() + " se défend !");
                         }
-                        if (persoAAttaquer is IllusionOf)
-                        {
-                            lock (_lock)
-                            {
-                                OnAppelPowerIllusioniste(EventArgs.Empty);
-                                persoAAttaquer.GetIllusionisteParent().SetNbIllusionOf(persoAAttaquer.GetIllusionisteParent().GetNbIllusionOf() - 1);
-                                persoAAttaquer.GetIllusionisteParent().Passive();
-                                charactersEaten.Add(persoAAttaquer);
-                                persosAAttaquer.Remove(persoAAttaquer);
-                                Console.WriteLine("Illusion " + persoAAttaquer.GetName() + " éliminée !");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //pas touché
-                        Console.WriteLine(persoAAttaquer.GetName() + " se défend !");
                     }
                 }
-            }
-            else
-            {
-                Console.WriteLine("Il n'y a plus de persos à attaquer !");
+                else
+                {
+                    Console.WriteLine("Il n'y a plus de persos à attaquer !");
+                }
             }
         }
 
@@ -123,31 +129,37 @@ namespace DM_JDR_Console.Characters
 
         public override void Power(List<Character> characters, List<Character> charactersEaten)
         {
-            Character persoTransfertCurrentLife = new Character();
-            for (int i = 0; i < characters.Count; i++)
+            lock (_lock)
             {
-                if(i == 0)
+                if (this.GetCurrentLife() > 0)
                 {
-                    persoTransfertCurrentLife = characters[i];
-                }
-                else
-                {
-                    if(characters[i].GetCurrentLife() > persoTransfertCurrentLife.GetCurrentLife())
+                    Character persoTransfertCurrentLife = new Character();
+                    for (int i = 0; i < characters.Count; i++)
                     {
-                        persoTransfertCurrentLife = characters[i];
+                        if (i == 0)
+                        {
+                            persoTransfertCurrentLife = characters[i];
+                        }
+                        else
+                        {
+                            if (characters[i].GetCurrentLife() > persoTransfertCurrentLife.GetCurrentLife())
+                            {
+                                persoTransfertCurrentLife = characters[i];
+                            }
+                        }
                     }
+                    int currentLifeTranfertAlchimiste = this.GetCurrentLife();
+                    this.SetCurrentLife(persoTransfertCurrentLife.GetCurrentLife());
+                    persoTransfertCurrentLife.SetCurrentLife(currentLifeTranfertAlchimiste);
+                    if (this.GetCurrentLife() > this.GetMaximumLife())
+                    {
+                        this.SetCurrentLife(this.GetMaximumLife());
+                    }
+                    Console.WriteLine(this.GetName() + " a échangé ses points de vie avec " + persoTransfertCurrentLife.GetName() + " !");
+                    Console.WriteLine(this.GetName() + " a maintenant " + this.GetCurrentLife().ToString() + " points de vie !");
+                    Console.WriteLine("Et " + persoTransfertCurrentLife.GetName() + " a maintenant " + persoTransfertCurrentLife.GetCurrentLife().ToString() + " points de vie !");
                 }
             }
-            int currentLifeTranfertAlchimiste = this.GetCurrentLife();
-            this.SetCurrentLife(persoTransfertCurrentLife.GetCurrentLife());
-            persoTransfertCurrentLife.SetCurrentLife(currentLifeTranfertAlchimiste);
-            if(this.GetCurrentLife() > this.GetMaximumLife())
-            {
-                this.SetCurrentLife(this.GetMaximumLife());
-            }
-            Console.WriteLine(this.GetName() + " a échangé ses points de vie avec " + persoTransfertCurrentLife.GetName() + " !");
-            Console.WriteLine(this.GetName() + " a maintenant " + this.GetCurrentLife().ToString() + " points de vie !");
-            Console.WriteLine("Et " + persoTransfertCurrentLife.GetName() + " a maintenant " + persoTransfertCurrentLife.GetCurrentLife().ToString() + " points de vie !");
         }
 
         public override int RollDice()
