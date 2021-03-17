@@ -43,8 +43,10 @@ namespace DM_JDR_Console
                 threads[i] = new Thread(() =>Figth(charactersList[i]));
                 threads[i].Start();*/
                 Console.WriteLine("A new challenger is coming : " + charactersList[i].GetName());
+                ThreadPool.QueueUserWorkItem(new WaitCallback(state => FigthAndPower(charactersList[i])));
                 //ThreadPool.QueueUserWorkItem(new WaitCallback(state => Figth(charactersList[i])));
-                ThreadPool.QueueUserWorkItem(new WaitCallback(state => FigthPower(charactersList[i])));
+                /*Thread.Sleep(5);
+                ThreadPool.QueueUserWorkItem(new WaitCallback(state => FigthPower(charactersList[i])));*/
                 Thread.Sleep(5);                
             }
             MyLog("----- Debut du combat -----");
@@ -57,25 +59,34 @@ namespace DM_JDR_Console
             timer1.Stop();
         }
 
-        public void Figth(Character character)
+        public void FigthAndPower(Character character)
+        {
+            Figth(character);
+            FigthPower(character);
+        }
+
+        public async void Figth(Character character)
         {
             Console.WriteLine(character.GetName() + " combat !");
             while (character.GetCurrentLife() > 0)
             {
                 int delay = (int)(1000 / character.GetAttackSpeed()) - character.RollDice() + character.GetDelay();
-                Thread.Sleep(delay);
-                Console.WriteLine(character.GetName() + " attaque !");
-                character.AttackGenerale(charactersList, charactersEaten);
+                await Task.Delay(delay);
+                if (character.GetCurrentLife() > 0 && estFini == false)
+                {
+                    Console.WriteLine(character.GetName() + " attaque !");
+                    character.AttackGenerale(charactersList, charactersEaten);
+                }
             }
         }
 
-        public void FigthPower(Character character)
+        public async void FigthPower(Character character)
         {
             Console.WriteLine(character.GetName() + " va utiliser un pouvoir !");
             while (character.GetCurrentLife() > 0 && estFini == false)
             {
                 int delay = (int)(1000 / character.GetPowerSpeed()) - character.RollDice() + character.GetDelay();
-                Thread.Sleep(delay);
+                await Task.Delay(delay);
                 if(character.GetCurrentLife() > 0 && estFini == false)
                 {
                     Console.WriteLine(character.GetName() + " utilise son pouvoir !");
